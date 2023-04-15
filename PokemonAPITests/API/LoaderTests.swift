@@ -74,6 +74,7 @@ final class LoaderTests: XCTestCase {
             client.complete(withStatusCode: 200, data: emptyListJSON)
         }
     }
+    
     // MARK: Helpers
     
     private func makeSUT(
@@ -83,6 +84,8 @@ final class LoaderTests: XCTestCase {
     ) -> (sut: Loader, client: HTTPClientSpy) {
         let client = HTTPClientSpy()
         let sut = Loader(url: url, client: client)
+        trackForMemoryLeak(instance: client)
+        trackForMemoryLeak(instance: sut)
         return (sut, client)
     }
     
