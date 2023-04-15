@@ -10,8 +10,14 @@ import Foundation
 struct Pokemon {
     let id: Int
     let name: String
-    let types: [Kind]
-    let abilities: [Ability]
-    let sprites: URL
-    let moves: [Move]
+    let types: [String]
+    let abilities: [String]
+    let sprites: String
+    let moves: [String]
+}
+
+extension Pokemon: Equatable {
+    static func == (lhs: Pokemon, rhs: Pokemon) -> Bool {
+        lhs.id == rhs.id
+    }
 }
