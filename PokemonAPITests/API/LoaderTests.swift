@@ -6,6 +6,7 @@
 //
 
 import XCTest
+import Foundation
 @testable import PokemonAPI
 
 final class LoaderTests: XCTestCase {
@@ -51,7 +52,7 @@ final class LoaderTests: XCTestCase {
         
         samples.enumerated().forEach { index, code in
             expect(sut: sut, completeWith: .failure(Loader.Error.invalidData)) {
-                let invalidData = makeItemsJSON([])
+                let invalidData = makeItemsJSONFromItems([])
                 client.complete(withStatusCode: code, data: invalidData, at: index)
             }
         }
@@ -70,9 +71,51 @@ final class LoaderTests: XCTestCase {
         let (sut, client) = makeSUT()
         
         expect(sut: sut, completeWith: .success([])) {
-            let emptyListJSON = makeItemsJSON([])
+            let emptyListJSON = makeItemsJSONFromItems([])
             client.complete(withStatusCode: 200, data: emptyListJSON)
         }
+    }
+    
+    func test_load_deliversItemsOn200HTTPResponseWithJSONItems() {
+        let (sut, client) = makeSUT()
+
+        let pokemon1 = makePokemon(
+            id: 25,
+            name: "Pikachu",
+            types: [Types(type: TypeInfo(name: "Electric"))],
+            abilities: [Ability(ability: AbilityInfo(name: "Static"))],
+            sprites: Sprites(frontDefault: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png"), moves: [Move(move: MoveInfo(name: "Thunderbolt"))])
+
+        let pokemon2 = makePokemon(
+            id: 35,
+            name: "Clefairy",
+            types: [Types(type: TypeInfo(name: "Fairy"))],
+            abilities: [Ability(ability: AbilityInfo(name: "Love"))],
+            sprites: Sprites(frontDefault: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/35.png"), moves: [Move(move: MoveInfo(name: "Loving in the air"))])
+
+        let items = [pokemon1.model.item, pokemon2.model.item]
+
+        let jsonItems = [pokemon1.model, pokemon2.model]
+        
+        expect(sut: sut, completeWith: .success(items)) {
+            let json = makeItemsJSONFromItems(jsonItems)
+            client.complete(withStatusCode: 200, data: json)
+        }
+    }
+    
+    func test_load_doesNotDeliverResultAfterSUTInstancesHasBeenDeallocated() {
+        let url = anyURL()
+        let client = HTTPClientSpy()
+        var sut: Loader? = Loader(url: url, client: client)
+        
+        var capturedResults = [Loader.Result]()
+        sut?.load { capturedResults.append($0) }
+        
+        sut = nil
+        client.complete(withStatusCode: 200, data: makeItemsJSONFromItems([]))
+        
+        XCTAssertTrue(capturedResults.isEmpty)
+        
     }
     
     // MARK: Helpers
@@ -84,8 +127,8 @@ final class LoaderTests: XCTestCase {
     ) -> (sut: Loader, client: HTTPClientSpy) {
         let client = HTTPClientSpy()
         let sut = Loader(url: url, client: client)
-        trackForMemoryLeak(instance: client)
-        trackForMemoryLeak(instance: sut)
+        trackForMemoryLeak(instance: client, file: file, line: line)
+        trackForMemoryLeak(instance: sut, file: file, line: line)
         return (sut, client)
     }
     
@@ -112,6 +155,28 @@ final class LoaderTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
+    private func makePokemon(id: Int, name: String, types: [Types], abilities: [Ability], sprites: Sprites, moves: [Move]) -> (model: Item, json: [String : Any]) {
+        
+        let item = Item(
+            id: id,
+            name: name,
+            abilities: abilities,
+            moves: moves,
+            sprites: sprites,
+            types: types)
+        
+        let json = [
+            "id": id,
+            "name": name,
+            "abilities": abilities,
+            "moves": moves,
+            "sprites": sprites,
+            "types": types
+        ] as [String : Any]
+
+        return (item, json)
+    }
+    
     private func anyURL() -> URL {
         return URL(string: "http://any-url.com")!
     }
@@ -124,33 +189,61 @@ final class LoaderTests: XCTestCase {
         return Data("anyData".utf8)
     }
     
-    private func makeItemsJSON(_ items: [[String: Any]]) -> Data {
+    private func makeItemsJSONFromItems(_ items: [Item]) -> Data {
+        let encoder = JSONEncoder()
         let itemsJSON = ["items": items]
-        return try! JSONSerialization.data(withJSONObject: itemsJSON)
+        let jsonData = try! encoder.encode(itemsJSON)
+        return jsonData
     }
-    
-    private class HTTPClientSpy: HTTPClient {
-        private var message = [(url: URL, completion: (HTTPClientResult) -> Void)]()
+
+    struct Item: Codable {
+        let id: Int
+        let name: String
+        let abilities: [Ability]
+        let moves: [Move]
+        let sprites: Sprites
+        let types: [Types]
         
-        var requestedURLs: [URL] {
-            message.map { $0.url }
+        var item: Pokemon {
+            return Pokemon(
+                id: id,
+                name: name,
+                types: types.map { $0.type.name },
+                abilities: abilities.map { $0.ability.name },
+                sprites: sprites.frontDefault,
+                moves: moves.map { $0.move.name })
         }
-        
-        func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void) {
-            message.append((url, completion))
+    }
+
+    struct Ability: Codable {
+        let ability: AbilityInfo
+    }
+
+    struct AbilityInfo: Codable {
+        let name: String
+    }
+
+    struct Move: Codable {
+        let move: MoveInfo
+    }
+
+    struct MoveInfo: Codable {
+        let name: String
+    }
+
+    struct Sprites: Codable {
+        let frontDefault: String
+
+        enum CodingKeys: String, CodingKey {
+            case frontDefault = "front_default"
         }
-        
-        func complete(with error: Error, at index: Int = 0) {
-            message[index].completion(.failure(error))
-        }
-        
-        func complete(withStatusCode code: Int, data: Data, at index: Int = 0) {
-            let response = HTTPURLResponse(
-                url: requestedURLs[index],
-                statusCode: code,
-                httpVersion: nil,
-                headerFields: nil)!
-            message[index].completion(.success((data, response)))
-        }
+    }
+
+    struct Types: Codable {
+        let type: TypeInfo
+    }
+
+    struct TypeInfo: Codable {
+        let name: String
     }
 }

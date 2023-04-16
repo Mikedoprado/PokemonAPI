@@ -15,38 +15,58 @@ final class PokemonsMapper {
             items.map { $0.item }
         }
     }
-
-    private struct Item: Decodable {
-        public let id: Int
-        public let name: String
-        public let types: [`Type`]
-        public let abilities: [Ability]
-        public let front_default: String
-        public let moves: [Move]
+    
+    struct Item: Codable {
+        let id: Int
+        let name: String
+        let abilities: [Ability]
+        let moves: [Move]
+        let sprites: Sprites
+        let types: [Types]
         
         var item: Pokemon {
             return Pokemon(
                 id: id,
                 name: name,
-                types: types.map { $0.name },
-                abilities: abilities.map { $0.name } ,
-                sprites: front_default,
-                moves: moves.map { $0.name })
+                types: types.map { $0.type.name },
+                abilities: abilities.map { $0.ability.name },
+                sprites: sprites.frontDefault,
+                moves: moves.map { $0.move.name })
         }
     }
-    
-    private struct `Type`: Codable {
+
+    struct Ability: Codable {
+        let ability: AbilityInfo
+    }
+
+    struct AbilityInfo: Codable {
         let name: String
     }
 
-    private struct Ability: Codable {
+    struct Move: Codable {
+        let move: MoveInfo
+    }
+
+    struct MoveInfo: Codable {
         let name: String
     }
 
-    private struct Move: Codable {
+    struct Sprites: Codable {
+        let frontDefault: String
+
+        enum CodingKeys: String, CodingKey {
+            case frontDefault = "front_default"
+        }
+    }
+
+    struct Types: Codable {
+        let type: TypeInfo
+    }
+
+    struct TypeInfo: Codable {
         let name: String
     }
-    
+
     private static var OK_200: Int { 200 }
     
     static func map(_ data: Data, from response: HTTPURLResponse) -> Loader.Result {
