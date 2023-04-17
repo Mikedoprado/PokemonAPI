@@ -21,7 +21,7 @@ struct PokeItemView: View {
             
             VStack(alignment: .leading, spacing: 8) {
                 Text(name)
-                    .font(.title2)
+                    .modifier(CustomFontModifier(size: .body))
                     .fontWeight(.regular)
                     .foregroundColor(.gray)
                 HStack(spacing: 10) {
@@ -30,10 +30,10 @@ struct PokeItemView: View {
                             RoundedRectangle(cornerRadius: 20)
                                 .foregroundColor(.gray)
                             Text(type)
-                                .font(.body)
+                                .modifier(CustomFontModifier(size: .caption))
                                 .fontWeight(.regular)
                                 .foregroundColor(.white)
-                                .padding(.vertical, 2)
+                                .padding(.vertical, 8)
                         }
                     }
                 }

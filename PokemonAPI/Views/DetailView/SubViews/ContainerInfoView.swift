@@ -23,10 +23,11 @@ struct ContainerInfoView<Content:View>: View {
                 .foregroundColor(.white)
             VStack(alignment: .leading) {
                 Text(title)
-                    .font(.callout)
+                    .modifier(CustomFontModifier(size: .subtitle))
                     .foregroundColor(.gray)
                     .padding(.leading, 20)
                     .padding(.top, 20)
+                    .padding(.bottom, 10)
                 content
                     .padding(.horizontal, 20)
             }.padding(.bottom, 20)
