@@ -14,7 +14,7 @@ struct BadgeTypeView: View {
     var body: some View {
         ZStack(alignment: .leading) {
             RoundedRectangle(cornerRadius: 25)
-                .foregroundColor(.gray)
+                .foregroundColor(PokeColor(rawValue: type)?.color)
             HStack {
                 PokemonTypeIconView(icon: type.lowercased())
                     .padding(.vertical, 8)

@@ -16,7 +16,7 @@ struct NavigationPokeList: View {
             ScrollView {
                 GridView(list: list)
             }
-            .background(Color.pink)
+            .background(Color.black)
             .navigationTitle("Pokedex")
             .toolbar {
                 Button(action: {}) {

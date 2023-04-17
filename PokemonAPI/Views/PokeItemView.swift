@@ -28,7 +28,7 @@ struct PokeItemView: View {
                     ForEach(type, id: \.self) { type in
                         ZStack(alignment: .center) {
                             RoundedRectangle(cornerRadius: 20)
-                                .foregroundColor(.gray)
+                                .foregroundColor(PokeColor(rawValue: type.lowercased())?.color)
                             Text(type)
                                 .modifier(CustomFontModifier(size: .caption))
                                 .fontWeight(.regular)
