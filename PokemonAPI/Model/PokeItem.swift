@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct PokeItem {
+struct PokeItem: Codable {
     var name: String
     var url: String
 }
 
-struct ListPokeItems {
+struct ListPokeItems: Codable {
     let results: [PokeItem]
 }

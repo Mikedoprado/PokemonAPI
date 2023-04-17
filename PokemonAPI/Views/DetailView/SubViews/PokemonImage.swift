@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct PokemonImage: View {
     var pokemonImage: String
@@ -14,18 +15,16 @@ struct PokemonImage: View {
         ZStack {
             RoundedRectangle(cornerRadius: 20)
                 .frame(maxWidth: .infinity)
-                .frame(height: 300)
                 .foregroundColor(.white)
-            Image(systemName: pokemonImage)
+            WebImage(url: URL(string: pokemonImage))
                 .resizable()
-                .frame(width: 100, height: 100)
-                .foregroundColor(.pink)
+                .aspectRatio(contentMode: .fit)
         }
     }
 }
 
 struct PokemonImage_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonImage(pokemonImage: "person")
+        PokemonImage(pokemonImage: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png")
     }
 }

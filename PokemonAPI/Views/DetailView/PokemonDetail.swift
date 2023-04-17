@@ -12,6 +12,7 @@ struct PokemonDetail: View {
     var abilities: [String]
     var moves: [String]
     var name: String
+    var image: String = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"
     
     var body: some View {
         ScrollView {
@@ -23,7 +24,7 @@ struct PokemonDetail: View {
                         ButtonViewBack()
                     }
                 }
-                PokemonImage(pokemonImage: "person")
+                PokemonImage(pokemonImage: image)
                 PokeTypeView(types: types, title: "Types")
                 AbilitiesView(abilities: abilities, title: "Abilities")
                 MovesView(moves: moves, title: "Moves")

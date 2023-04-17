@@ -32,6 +32,7 @@
 		18CA4CA929EDA713008EC544 /* AbilitiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CA4CA829EDA713008EC544 /* AbilitiesView.swift */; };
 		18CA4CAB29EDA749008EC544 /* MovesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CA4CAA29EDA749008EC544 /* MovesView.swift */; };
 		18CA4CAE29EDA7B5008EC544 /* CustomFontModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CA4CAD29EDA7B5008EC544 /* CustomFontModifier.swift */; };
+		18CA4CB229EDAAA5008EC544 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 18CA4CB129EDAAA5008EC544 /* SDWebImageSwiftUI */; };
 		18D7941A29EAE902007E3785 /* PokemonAPIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D7941929EAE902007E3785 /* PokemonAPIApp.swift */; };
 		18D7941C29EAE902007E3785 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D7941B29EAE902007E3785 /* ContentView.swift */; };
 		18D7941E29EAE903007E3785 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18D7941D29EAE903007E3785 /* Assets.xcassets */; };
@@ -92,6 +93,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18CA4CB229EDAAA5008EC544 /* SDWebImageSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -257,6 +259,9 @@
 			dependencies = (
 			);
 			name = PokemonAPI;
+			packageProductDependencies = (
+				18CA4CB129EDAAA5008EC544 /* SDWebImageSwiftUI */,
+			);
 			productName = PokemonAPI;
 			productReference = 18D7941629EAE902007E3785 /* PokemonAPI.app */;
 			productType = "com.apple.product-type.application";
@@ -307,6 +312,9 @@
 				Base,
 			);
 			mainGroup = 18D7940D29EAE902007E3785;
+			packageReferences = (
+				18CA4CB029EDAAA5008EC544 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+			);
 			productRefGroup = 18D7941729EAE902007E3785 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -636,6 +644,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		18CA4CB029EDAAA5008EC544 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		18CA4CB129EDAAA5008EC544 /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 18CA4CB029EDAAA5008EC544 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		18D7942429EAE903007E3785 /* PokemonAPI.xcdatamodeld */ = {
