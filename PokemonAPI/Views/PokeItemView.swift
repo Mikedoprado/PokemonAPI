@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct PokeItem: View {
+struct PokeItemView: View {
     var name: String
     var type: [String]
     
@@ -47,6 +47,6 @@ struct PokeItem: View {
 
 struct PokeItem_Previews: PreviewProvider {
     static var previews: some View {
-        PokeItem(name: "Bulbasaur", type: ["Grass"])
+        PokeItemView(name: "Bulbasaur", type: ["Grass"])
     }
 }

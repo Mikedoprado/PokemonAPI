@@ -15,7 +15,7 @@ struct GridView: View {
     var body: some View {
         LazyVGrid(columns: columnas, spacing: 10) {
             ForEach(list, id: \.id) { pokemon in
-                PokeItem(name: pokemon.name, type: pokemon.types)
+                PokeItemView(name: pokemon.name, type: pokemon.types)
             }
         }
         .padding(10)

@@ -69,7 +69,7 @@ final class PokemonsMapper {
 
     private static var OK_200: Int { 200 }
     
-    static func map(_ data: Data, from response: HTTPURLResponse) -> Loader.Result {
+    static func map(_ data: Data, from response: HTTPURLResponse) -> Result<[Pokemon], Swift.Error> {
         guard
             response.statusCode == OK_200,
             let root = try? JSONDecoder().decode(Root.self, from: data)
