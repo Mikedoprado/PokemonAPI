@@ -12,7 +12,7 @@ struct PokemonDetail: View {
     var abilities: [String]
     var moves: [String]
     var name: String
-    var image: String = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"
+    var image: String
     
     var body: some View {
         ScrollView {
@@ -20,9 +20,6 @@ struct PokemonDetail: View {
                 HStack {
                     PokemonNameView(name: name)
                     Spacer()
-                    Button(action: {}) {
-                        ButtonViewBack()
-                    }
                 }
                 PokemonImage(pokemonImage: image)
                 PokeTypeView(types: types, title: "Types")
@@ -42,7 +39,7 @@ struct PokemonDetail_Previews: PreviewProvider {
             types: ["grass", "water"],
             abilities: ["Overgrown" , "Chlorophyll"],
             moves: ["Razor wind", "Sword-Dance", "Cut", "Bind"],
-            name: "Bulbasaur"
+            name: "Bulbasaur", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/5.png"
         )
     }
 }

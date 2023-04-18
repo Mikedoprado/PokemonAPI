@@ -26,6 +26,7 @@ enum PokeColor: String {
     case rock
     case steel
     case water
+    case white
     
     var color: Color {
         switch self {
@@ -65,6 +66,8 @@ enum PokeColor: String {
             return PokeColor.colorLiteral(color: #colorLiteral(red: 0.5176470588, green: 0.6549019608, blue: 0.662745098, alpha: 1))
         case .water:
             return PokeColor.colorLiteral(color: #colorLiteral(red: 0.2, green: 0.4588235294, blue: 0.6039215686, alpha: 1))
+        case .white:
+            return PokeColor.colorLiteral(color: #colorLiteral(red: 0.9719485641, green: 0.9719484448, blue: 0.9719485641, alpha: 1))
         }
     }
     

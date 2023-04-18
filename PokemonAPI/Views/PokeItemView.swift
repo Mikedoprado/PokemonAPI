@@ -6,22 +6,28 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct PokeItemView: View {
     var name: String
     var type: [String]
+    var pokemonImage: String
     
     var body: some View {
         VStack(alignment: .leading) {
-            RoundedRectangle(cornerRadius: 20)
-                .frame(maxWidth: .infinity)
-                .frame(height: 150)
-                .foregroundColor(.pink)
-                .padding(.bottom, 0)
-            
+            ZStack {
+                RoundedRectangle(cornerRadius: 20)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 150)
+                    .foregroundColor(PokeColor.white.color)
+                    .padding(.bottom, 0)
+                WebImage(url: URL(string: pokemonImage))
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+            }
             VStack(alignment: .leading, spacing: 8) {
                 Text(name)
-                    .modifier(CustomFontModifier(size: .body))
+                    .modifier(CustomFontModifier(size: .caption))
                     .fontWeight(.regular)
                     .foregroundColor(.gray)
                 HStack(spacing: 10) {
@@ -33,7 +39,7 @@ struct PokeItemView: View {
                                 .modifier(CustomFontModifier(size: .caption))
                                 .fontWeight(.regular)
                                 .foregroundColor(.white)
-                                .padding(.vertical, 8)
+                                .padding(.vertical, 3)
                         }
                     }
                 }
@@ -47,6 +53,6 @@ struct PokeItemView: View {
 
 struct PokeItem_Previews: PreviewProvider {
     static var previews: some View {
-        PokeItemView(name: "Bulbasaur", type: ["Grass"])
+        PokeItemView(name: "Bulbasaur", type: ["Grass"], pokemonImage: "")
     }
 }

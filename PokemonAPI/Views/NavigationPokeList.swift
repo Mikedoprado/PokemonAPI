@@ -10,11 +10,12 @@ import SwiftUI
 struct NavigationPokeList: View {
 
     var list: [Pokemon]
+    var filter: [Pokemon] = []
     
     var body: some View {
         NavigationView {
             ScrollView {
-                GridView(list: list)
+                GridView(list: !filter.isEmpty ? filter : list)
             }
             .background(Color.black)
             .navigationTitle("Pokedex")
