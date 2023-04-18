@@ -10,17 +10,21 @@ import SwiftUI
 struct NavigationPokeList: View {
 
     var list: [Pokemon]
-    var filter: [Pokemon] = []
+    var filter: [Pokemon] {
+        list.filter { $0.types.contains("Grass") }
+    }
+    
+    @State var isSearching: Bool = false
     
     var body: some View {
         NavigationView {
             ScrollView {
-                GridView(list: !filter.isEmpty ? filter : list)
+                GridView(list: isSearching ? filter : list)
             }
             .background(PokeColor.dark.color)
             .navigationTitle("Pokedex")
             .toolbar {
-                Button(action: {}) {
+                Button(action: { isSearching.toggle() }) {
                     HStack {
                         Text("Search")
                         Image(systemName: "magnifyingglass")

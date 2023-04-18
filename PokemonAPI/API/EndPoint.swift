@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Endpoint {
+enum Endpoint: Equatable {
     case getPokeList
     case getPokemonByName(String)
     case getPokemonByType(String)
