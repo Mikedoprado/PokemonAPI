@@ -15,7 +15,7 @@ struct PokeTypeView: View {
         ContainerInfoView(title: title) {
             HStack {
                 ForEach(types, id: \.self) { type in
-                    BadgeTypeView(type: type, icon: type)
+                    BadgeTypeView(type: type)
                 }
             }
         }

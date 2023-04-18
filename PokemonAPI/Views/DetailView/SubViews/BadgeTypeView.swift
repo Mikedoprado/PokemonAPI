@@ -9,12 +9,11 @@ import SwiftUI
 
 struct BadgeTypeView: View {
     var type: String
-    var icon: String
     
     var body: some View {
         ZStack(alignment: .leading) {
             RoundedRectangle(cornerRadius: 25)
-                .foregroundColor(PokeColor(rawValue: type)?.color)
+                .foregroundColor(PokeColor(rawValue: type.lowercased())?.color)
             HStack {
                 PokemonTypeIconView(icon: type.lowercased())
                     .padding(.vertical, 8)
@@ -30,6 +29,6 @@ struct BadgeTypeView: View {
 
 struct BadgeTypeView_Previews: PreviewProvider {
     static var previews: some View {
-        BadgeTypeView(type: "grass", icon: "grass")
+        BadgeTypeView(type: "grass")
     }
 }

@@ -15,7 +15,7 @@ struct PokemonDetail: View {
     var image: String
     
     var body: some View {
-        ScrollView {
+        ScrollViewNavigationAppearance {
             VStack(spacing: 20) {
                 HStack {
                     PokemonNameView(name: name)
@@ -26,10 +26,7 @@ struct PokemonDetail: View {
                 AbilitiesView(abilities: abilities, title: "Abilities")
                 MovesView(moves: moves, title: "Moves")
             }
-            .padding(.horizontal, 20)
         }
-        .frame(maxWidth: .infinity)
-        .background(Color.pink)
     }
 }
 
