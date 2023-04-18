@@ -9,14 +9,20 @@ import Foundation
 @testable import PokemonAPI
 
 class HTTPClientSpy: HTTPClient {
-    private var message = [(url: URL, completion: (HTTPClientResult) -> Void)]()
+
+    private class Task: HTTPClientTask {
+        func cancel() {}
+    }
+    
+    private var message = [(url: URL, completion: (Result) -> Void)]()
     
     var requestedURLs: [URL] {
         message.map { $0.url }
     }
     
-    func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void) {
+    func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) -> PokemonAPI.HTTPClientTask {
         message.append((url, completion))
+        return Task()
     }
     
     func complete(with error: Error, at index: Int = 0) {
