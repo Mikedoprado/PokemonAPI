@@ -7,7 +7,10 @@
 
 import Foundation
 
-protocol PokemonsLoader {
-    typealias LoadPokemonResult = Result<[Pokemon], Swift.Error>
-    func load(completion: @escaping (LoadPokemonResult) -> Void)
+typealias PokemonsLoader = Loader<[Pokemon]>
+
+extension PokemonsLoader {
+    convenience init(url: URL, client: HTTPClient) {
+        self.init(url: url, client: client, mapper: PokemonsMapper.map)
+    }
 }

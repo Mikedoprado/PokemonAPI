@@ -20,11 +20,12 @@ struct PokeItemMapper {
     
     private static var OK_200: Int { 200 }
     
-    static func map(_ data: Data, from response: HTTPURLResponse) -> Result<[PokeItem], Swift.Error> {
+    static func map(_ data: Data, from response: HTTPURLResponse) throws -> [PokeItem] {
         guard
             response.statusCode == OK_200,
             let listPokeItems = try? JSONDecoder().decode(ListPokeItems.self, from: data)
-        else { return .failure(Loader.Error.invalidData) }
-        return  .success(listPokeItems.results)
+        else { throw Loader<[PokeItem]>.Error.invalidData }
+        return  listPokeItems.results
     }
+
 }

@@ -69,11 +69,11 @@ final class PokemonsMapper {
 
     private static var OK_200: Int { 200 }
     
-    static func map(_ data: Data, from response: HTTPURLResponse) -> Result<[Pokemon], Swift.Error> {
+    static func map(_ data: Data,_ response: HTTPURLResponse) throws -> [Pokemon] {
         guard
             response.statusCode == OK_200,
             let root = try? JSONDecoder().decode(Root.self, from: data)
-        else { return .failure(Loader.Error.invalidData) }
-        return  .success(root.pokemonList)
+        else { throw Loader<[Pokemon]>.Error.invalidData }
+        return root.pokemonList
     }
 }
