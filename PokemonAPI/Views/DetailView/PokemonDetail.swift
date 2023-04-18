@@ -15,7 +15,9 @@ struct PokemonDetail: View {
     var image: String
     
     var body: some View {
-        ScrollViewNavigationAppearance {
+        ScrollViewNavigationAppearance(
+            backgroundColor: PokeColor(rawValue: types[0].lowercased())?.color ?? PokeColor.dark.color
+        ) {
             VStack(spacing: 20) {
                 HStack {
                     PokemonNameView(name: name)
@@ -36,7 +38,7 @@ struct PokemonDetail_Previews: PreviewProvider {
             types: ["grass", "water"],
             abilities: ["Overgrown" , "Chlorophyll"],
             moves: ["Razor wind", "Sword-Dance", "Cut", "Bind"],
-            name: "Bulbasaur", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/5.png"
+            name: "Bulbasaur", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"
         )
     }
 }

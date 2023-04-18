@@ -12,7 +12,7 @@ var list = [
     Pokemon(id: 2, name: "Ivysaur", types: ["Grass", "Poison"], abilities: ["Cutting Leaf"], sprites: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/2.png", moves: [""]),
     Pokemon(id: 3, name: "Venusaur", types: ["Grass", "Poison"], abilities: ["Cutting Leaf"], sprites: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/3.png", moves: [""]),
     Pokemon(id: 4, name: "Charmander", types: ["Fire"], abilities: ["Fire ball"], sprites: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png", moves: [""]),
-    Pokemon(id: 5, name: "Charmeleon", types: ["Fire"], abilities: ["Fire ball"], sprites: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/5.png", moves: [""]),
+    Pokemon(id: 5, name: "Charmeleon", types: ["Dragon", "Fire"], abilities: ["Fire ball"], sprites: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/5.png", moves: [""])
 ]
 
 struct ContentView: View {

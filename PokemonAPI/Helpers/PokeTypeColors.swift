@@ -33,7 +33,7 @@ enum PokeColor: String {
         case .bug:
             return PokeColor.colorLiteral(color: #colorLiteral(red: 0.4156862745, green: 0.8039215686, blue: 0.2352941176, alpha: 1))
         case .dark:
-            return PokeColor.colorLiteral(color:  #colorLiteral(red: 0.1960784314, green: 0.1803921569, blue: 0.1803921569, alpha: 1))
+            return PokeColor.colorLiteral(color:  #colorLiteral(red: 0.146630764, green: 0.1301804483, blue: 0.129812032, alpha: 1))
         case .dragon:
             return PokeColor.colorLiteral(color:  #colorLiteral(red: 0.3725490196, green: 0.337254902, blue: 0.3294117647, alpha: 1))
         case .electric:
