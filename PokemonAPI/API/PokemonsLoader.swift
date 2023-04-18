@@ -14,3 +14,11 @@ extension PokemonsLoader {
         self.init(url: url, client: client, mapper: PokemonsMapper.map)
     }
 }
+
+typealias PokemonsItemsLoader = Loader<[PokeItem]>
+
+extension PokemonsItemsLoader {
+    convenience init(url: URL, client: HTTPClient) {
+        self.init(url: url, client: client, mapper: PokeItemMapper.map)
+    }
+}

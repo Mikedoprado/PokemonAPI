@@ -140,19 +140,7 @@ final class PokemonLoaderTests: XCTestCase {
 
         return (item, json)
     }
-    
-    private func anyURL() -> URL {
-        return URL(string: "http://any-url.com")!
-    }
-    
-    private func anyNSError() -> NSError {
-        return NSError(domain: "error", code: 0)
-    }
-    
-    private func anyData() -> Data {
-        return Data("anyData".utf8)
-    }
-    
+
     private func makeItemsJSONFromItems(_ items: [Item]) -> Data {
         let encoder = JSONEncoder()
         let itemsJSON = ["items": items]

@@ -38,7 +38,7 @@ final class LoaderTests: XCTestCase {
     func test_load_deliverErrorOnClientError() {
         let (sut, client) = makeSUT()
         expect(sut: sut, completeWith: .failure(Loader<String>.Error.connectivity)) {
-            let clientError = LoaderTests.anyNSError()
+            let clientError = anyNSError()
             client.complete(with: clientError)
         }
 
@@ -46,7 +46,7 @@ final class LoaderTests: XCTestCase {
 
     func test_load_deliverErrorOnMapperError() {
         let (sut, client) = makeSUT(mapper: {  _, _ in
-            throw LoaderTests.anyNSError()
+            throw anyNSError()
         })
         
         expect(sut: sut, completeWith: .failure(Loader<String>.Error.invalidData)) {
@@ -116,19 +116,6 @@ final class LoaderTests: XCTestCase {
         action()
         
         wait(for: [exp], timeout: 1.0)
-    }
-
-    
-    private func anyURL() -> URL {
-        return URL(string: "http://any-url.com")!
-    }
-    
-    private static func anyNSError() -> NSError {
-        return NSError(domain: "error", code: 0)
-    }
-    
-    private func anyData() -> Data {
-        return Data("anyData".utf8)
     }
     
     private func makeItemsJSON(_ items: [String: Any]) -> Data {

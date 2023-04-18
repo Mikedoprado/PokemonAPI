@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PokeItem: Codable {
+struct PokeItem: Codable, Equatable {
     var name: String
     var url: String
 }

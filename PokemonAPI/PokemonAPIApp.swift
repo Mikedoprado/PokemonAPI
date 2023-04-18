@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+let baseURL = URL(string: "https://pokeapi.co/api")!
+
 @main
 struct PokemonAPIApp: App {
     let persistenceController = PersistenceController.shared
