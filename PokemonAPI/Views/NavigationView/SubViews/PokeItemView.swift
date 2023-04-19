@@ -33,14 +33,15 @@ struct PokeItemView: View {
                 HStack(spacing: 10) {
                     ForEach(type, id: \.self) { type in
                         ZStack(alignment: .center) {
-                            RoundedRectangle(cornerRadius: 20)
+                            Circle()
                                 .foregroundColor(PokeColor(rawValue: type.lowercased())?.color)
-                            Text(type.capitalized)
-                                .modifier(CustomFontModifier(size: .caption))
-                                .fontWeight(.regular)
-                                .foregroundColor(.white)
-                                .padding(.vertical, 3)
-                        }
+                            PokemonTypeIconView(icon: type.lowercased())
+//                            Text(type.capitalized)
+//                                .modifier(CustomFontModifier(size: .caption))
+//                                .fontWeight(.regular)
+//                                .foregroundColor(.white)
+//                                .padding(.vertical, 3)
+                        }.frame(width: 40, height: 40)
                     }
                 }
             }.padding(.horizontal, 10)

@@ -12,7 +12,9 @@ struct ContentView: View {
     @StateObject var viewModel = FactoryPokemonListViewModel().makeViewModel()
 
     var body: some View {
-        NavigationPokeList(list: viewModel.pokeList)
+        NavigationPokeList(
+            list: viewModel.pokeList,
+            textfieldSearch: $viewModel.textSearching)
             .onAppear {
                 viewModel.fetchPokemons()
             }

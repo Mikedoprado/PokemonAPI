@@ -13,12 +13,9 @@ struct AbilitiesView: View {
     
     var body: some View {
         ContainerInfoView(title: title) {
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading) {
                 ForEach(abilities, id: \.self) { ability in
-                    Text(ability.capitalized)
-                        .modifier(CustomFontModifier(size: .body))
-                        .foregroundColor(PokeColor.dragon.color)
-                        .padding(.trailing, 10)
+                    CharacteristicTextView(characteristic: ability)
                 }
             }
         }
