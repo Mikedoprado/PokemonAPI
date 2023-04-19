@@ -17,16 +17,16 @@ struct GridView: View {
             ForEach(list, id: \.id) { pokemon in
                 NavigationLink(
                     destination: PokemonDetail(
-                        types: pokemon.types,
-                        abilities: pokemon.abilities,
-                        moves: pokemon.moves,
-                        name: pokemon.name,
-                        image: pokemon.sprites)
+                        types: pokemon.types ?? [],
+                        abilities: pokemon.abilities ?? [],
+                        moves: pokemon.moves ?? [],
+                        name: pokemon.name ?? "",
+                        image: pokemon.sprites ?? "")
                 ) {
                     PokeItemView(
-                        name: pokemon.name,
-                        type: pokemon.types,
-                        pokemonImage: pokemon.sprites)
+                        name: pokemon.name ?? "",
+                        type: pokemon.types ?? [],
+                        pokemonImage: pokemon.sprites ?? "")
                 }
             }
         }
@@ -36,6 +36,6 @@ struct GridView: View {
 
 struct GridView_Previews: PreviewProvider {
     static var previews: some View {
-        GridView(list: list)
+        GridView(list: [])
     }
 }

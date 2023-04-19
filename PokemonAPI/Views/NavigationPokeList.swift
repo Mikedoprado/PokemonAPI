@@ -10,9 +10,7 @@ import SwiftUI
 struct NavigationPokeList: View {
 
     var list: [Pokemon]
-    var filter: [Pokemon] {
-        list.filter { $0.types.contains("Grass") }
-    }
+    var filter: [Pokemon] = []
     
     @State var isSearching: Bool = false
     
@@ -40,6 +38,6 @@ struct NavigationPokeList: View {
 
 struct NavigationPokeList_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationPokeList(list: list)
+        NavigationPokeList(list: [])
     }
 }

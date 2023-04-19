@@ -13,9 +13,9 @@ struct PokemonNameView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Name")
-                .modifier(CustomFontModifier(size: .subtitle))
+                .modifier(CustomFontModifier(size: .subtitle, weight: .bold))
                 .foregroundColor(.white)
-            Text(name)
+            Text(name.capitalized)
                 .modifier(CustomFontModifier(size: .title))
                 .foregroundColor(.white)
         }

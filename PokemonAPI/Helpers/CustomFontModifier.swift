@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CustomFontModifier: ViewModifier {
     var size: FontSize
+    var weight: Font.Weight = .regular
     
     enum FontSize: CGFloat {
         case bigtitle = 28
@@ -19,6 +20,8 @@ struct CustomFontModifier: ViewModifier {
     }
     
     func body(content: Content) -> some View {
-        content.font(.custom("pixelmix", size: size.rawValue))
+        content
+            .font(.custom("pixelmix", size: size.rawValue))
+            .fontWeight(weight)
     }
 }

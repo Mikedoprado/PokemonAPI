@@ -15,12 +15,17 @@ struct MovesView: View {
             ForEach(Array(moves.enumerated()), id: \.1) { (index, move) in
                 if index < 9 {
                     VStack {
-                        Text(move)
+                        Text(move.capitalized)
                             .modifier(CustomFontModifier(size: .body))
-                            .foregroundColor(.gray)
+                            .foregroundColor(PokeColor.dragon.color)
                             .padding(.bottom, 5)
                     }
                 }
+            }
+            if moves.count > 9 {
+                Text("...")
+                    .modifier(CustomFontModifier(size: .body))
+                    .foregroundColor(PokeColor.dragon.color)
             }
         }
     }

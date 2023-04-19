@@ -26,7 +26,7 @@ struct PokeItemView: View {
                     .aspectRatio(contentMode: .fit)
             }
             VStack(alignment: .leading, spacing: 8) {
-                Text(name)
+                Text(name.capitalized)
                     .modifier(CustomFontModifier(size: .caption))
                     .fontWeight(.regular)
                     .foregroundColor(.gray)
@@ -35,7 +35,7 @@ struct PokeItemView: View {
                         ZStack(alignment: .center) {
                             RoundedRectangle(cornerRadius: 20)
                                 .foregroundColor(PokeColor(rawValue: type.lowercased())?.color)
-                            Text(type)
+                            Text(type.capitalized)
                                 .modifier(CustomFontModifier(size: .caption))
                                 .fontWeight(.regular)
                                 .foregroundColor(.white)

@@ -17,7 +17,7 @@ final class PokeItemLoaderTests: XCTestCase {
         let samples = [199, 201, 300, 400, 500]
         
         samples.enumerated().forEach { index, code in
-            expect(sut: sut, completeWith: .failure(PokemonsItemsLoader.Error.invalidData)) {
+            expect(sut: sut, completeWith: .failure(PokeItemsLoader.Error.invalidData)) {
                 let invalidData = makeItemsJSONFromItems([])
                 client.complete(withStatusCode: code, data: invalidData, at: index)
             }
@@ -30,7 +30,7 @@ final class PokeItemLoaderTests: XCTestCase {
         let samples = [200, 201, 250, 280, 299]
         
         samples.enumerated().forEach { index, code in
-            expect(sut: sut, completeWith: .failure(PokemonsItemsLoader.Error.invalidData)) {
+            expect(sut: sut, completeWith: .failure(PokeItemsLoader.Error.invalidData)) {
                 let invalidJSON = Data("invalid json".utf8)
                 client.complete(withStatusCode: code, data: invalidJSON, at: index)
             }
@@ -40,7 +40,7 @@ final class PokeItemLoaderTests: XCTestCase {
     func test_deliverErrorOn200HTTPResponseWithInvalidData() {
         let (sut, client) = makeSUT()
         
-        expect(sut: sut, completeWith: .failure(PokemonsItemsLoader.Error.invalidData)) {
+        expect(sut: sut, completeWith: .failure(PokeItemsLoader.Error.invalidData)) {
             let invalidData = Data("invalidData".utf8)
             client.complete(withStatusCode: 200, data: invalidData)
         }
@@ -77,31 +77,31 @@ final class PokeItemLoaderTests: XCTestCase {
     // MARK: Helpers
     
     private func makeSUT(
-        url: URL = URL(string: "http://any-url.com")!,
         file: StaticString = #filePath,
         line: UInt = #line
-    ) -> (sut: PokemonsItemsLoader, client: HTTPClientSpy) {
+    ) -> (sut: PokeItemsLoader, client: HTTPClientSpy) {
         let client = HTTPClientSpy()
-        let sut = PokemonsItemsLoader(url: url, client: client)
+        let sut = PokeItemsLoader(client: client)
         trackForMemoryLeak(instance: client, file: file, line: line)
         trackForMemoryLeak(instance: sut, file: file, line: line)
         return (sut, client)
     }
     
     private func expect(
-        sut: PokemonsItemsLoader,
-        completeWith expectedResult: PokemonsItemsLoader.Result,
+        sut: PokeItemsLoader,
+        completeWith expectedResult: PokeItemsLoader.Result,
         action: () -> Void,
+        url: URL = URL(string: "http://any-url.com")!,
         file: StaticString = #filePath,
         line: UInt = #line
     ) {
         let exp = expectation(description: "waiting for completion")
-        sut.load { receivedResult in
+        sut.load(url: url) { receivedResult in
             switch (receivedResult, expectedResult) {
             case let (.success(receivedItems), .success(expectedItems)):
                 XCTAssertEqual(receivedItems, expectedItems, file: file, line: line)
             case let (.failure(receivedError), .failure(expectedError)):
-                XCTAssertEqual(receivedError as! PokemonsItemsLoader.Error, expectedError as! PokemonsItemsLoader.Error, file: file, line: line)
+                XCTAssertEqual(receivedError as! PokeItemsLoader.Error, expectedError as! PokeItemsLoader.Error, file: file, line: line)
             default: XCTFail("Expected result \(expectedResult) got \(receivedResult) instead", file: file, line: line)
             }
             exp.fulfill()

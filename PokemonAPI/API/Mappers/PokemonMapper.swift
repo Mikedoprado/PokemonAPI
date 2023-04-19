@@ -7,31 +7,31 @@
 
 import Foundation
 
-final class PokemonsMapper {
+final class PokemonMapper {
     
     private struct Root: Decodable {
         let items: [Item]
         var pokemonList: [Pokemon] {
-            items.map { $0.item }
+            items.map { $0.pokemon }
         }
     }
     
     struct Item: Codable {
         let id: Int
-        let name: String
-        let abilities: [Ability]
-        let moves: [Move]
-        let sprites: Sprites
-        let types: [Types]
+        let name: String?
+        let abilities: [Ability]?
+        let moves: [Move]?
+        let sprites: Sprites?
+        let types: [Types]?
         
-        var item: Pokemon {
+        var pokemon: Pokemon {
             return Pokemon(
                 id: id,
                 name: name,
-                types: types.map { $0.type.name },
-                abilities: abilities.map { $0.ability.name },
-                sprites: sprites.frontDefault,
-                moves: moves.map { $0.move.name })
+                types: types?.map { $0.type.name },
+                abilities: abilities?.map { $0.ability.name },
+                sprites: sprites?.frontDefault,
+                moves: moves?.map { $0.move.name })
         }
     }
 
@@ -69,11 +69,11 @@ final class PokemonsMapper {
 
     private static var OK_200: Int { 200 }
     
-    static func map(_ data: Data,_ response: HTTPURLResponse) throws -> [Pokemon] {
+    static func map(_ data: Data,_ response: HTTPURLResponse) throws -> Pokemon {
         guard
             response.statusCode == OK_200,
-            let root = try? JSONDecoder().decode(Root.self, from: data)
-        else { throw Loader<[Pokemon]>.Error.invalidData }
-        return root.pokemonList
+            let item = try? JSONDecoder().decode(Item.self, from: data)
+        else { throw Loader<Pokemon>.Error.invalidData }
+        return item.pokemon
     }
 }

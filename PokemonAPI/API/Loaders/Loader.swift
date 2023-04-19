@@ -8,12 +8,10 @@
 import Foundation
 
 final class Loader<Resource> {
-    private let url: URL
     private let client: HTTPClient
     private let mapper: Mapper
 
-    init(url: URL, client: HTTPClient, mapper: @escaping Mapper) {
-        self.url = url
+    init(client: HTTPClient, mapper: @escaping Mapper) {
         self.client = client
         self.mapper = mapper
     }
@@ -26,13 +24,13 @@ final class Loader<Resource> {
         case invalidData
     }
     
-    func load(completion: @escaping (Result) -> Void) {
+    func load(url: URL, completion: @escaping (Result) -> Void) {
         client.get(from: url) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case let .success((data, response)):
                 completion(self.map(data, from: response))
-            case .failure(_):
+            case .failure:
                 completion(.failure(Error.connectivity))
             }
         }

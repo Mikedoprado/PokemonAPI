@@ -9,11 +9,11 @@ import Foundation
 
 struct Pokemon {
     let id: Int
-    let name: String
-    let types: [String]
-    let abilities: [String]
-    let sprites: String
-    let moves: [String]
+    let name: String?
+    let types: [String]?
+    let abilities: [String]?
+    let sprites: String?
+    let moves: [String]?
 }
 
 extension Pokemon: Equatable {

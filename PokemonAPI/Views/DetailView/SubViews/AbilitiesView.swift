@@ -13,11 +13,11 @@ struct AbilitiesView: View {
     
     var body: some View {
         ContainerInfoView(title: title) {
-            HStack {
+            VStack(alignment: .leading, spacing: 10) {
                 ForEach(abilities, id: \.self) { ability in
                     Text(ability.capitalized)
                         .modifier(CustomFontModifier(size: .body))
-                        .foregroundColor(.gray)
+                        .foregroundColor(PokeColor.dragon.color)
                         .padding(.trailing, 10)
                 }
             }

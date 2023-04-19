@@ -17,8 +17,8 @@ final class PokemonLoaderTests: XCTestCase {
         let samples = [199, 201, 300, 400, 500]
         
         samples.enumerated().forEach { index, code in
-            expect(sut: sut, completeWith: .failure(PokemonsLoader.Error.invalidData)) {
-                let invalidData = makeItemsJSONFromItems([])
+            expect(sut: sut, completeWith: .failure(PokemonLoader.Error.invalidData)) {
+                let invalidData = Data("invalid data".utf8)
                 client.complete(withStatusCode: code, data: invalidData, at: index)
             }
         }
@@ -30,7 +30,7 @@ final class PokemonLoaderTests: XCTestCase {
         let samples = [200, 201, 250, 280, 299]
         
         samples.enumerated().forEach { index, code in
-            expect(sut: sut, completeWith: .failure(PokemonsLoader.Error.invalidData)) {
+            expect(sut: sut, completeWith: .failure(PokemonLoader.Error.invalidData)) {
                 let invalidJSON = Data("invalid json".utf8)
                 client.complete(withStatusCode: code, data: invalidJSON, at: index)
             }
@@ -40,18 +40,9 @@ final class PokemonLoaderTests: XCTestCase {
     func test_deliverErrorOn200HTTPResponseWithInvalidData() {
         let (sut, client) = makeSUT()
         
-        expect(sut: sut, completeWith: .failure(PokemonsLoader.Error.invalidData)) {
+        expect(sut: sut, completeWith: .failure(PokemonLoader.Error.invalidData)) {
             let invalidData = Data("invalidData".utf8)
             client.complete(withStatusCode: 200, data: invalidData)
-        }
-    }
-    
-    func test_deliverNoItemsOn200HTTPResponseWithEmptyJSON() {
-        let (sut, client) = makeSUT()
-        
-        expect(sut: sut, completeWith: .success([])) {
-            let emptyListJSON = makeItemsJSONFromItems([])
-            client.complete(withStatusCode: 200, data: emptyListJSON)
         }
     }
     
@@ -64,20 +55,9 @@ final class PokemonLoaderTests: XCTestCase {
             types: [Types(type: TypeInfo(name: "Electric"))],
             abilities: [Ability(ability: AbilityInfo(name: "Static"))],
             sprites: Sprites(frontDefault: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png"), moves: [Move(move: MoveInfo(name: "Thunderbolt"))])
-
-        let pokemon2 = makePokemon(
-            id: 35,
-            name: "Clefairy",
-            types: [Types(type: TypeInfo(name: "Fairy"))],
-            abilities: [Ability(ability: AbilityInfo(name: "Love"))],
-            sprites: Sprites(frontDefault: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/35.png"), moves: [Move(move: MoveInfo(name: "Loving in the air"))])
-
-        let items = [pokemon1.model.item, pokemon2.model.item]
-
-        let jsonItems = [pokemon1.model, pokemon2.model]
         
-        expect(sut: sut, completeWith: .success(items)) {
-            let json = makeItemsJSONFromItems(jsonItems)
+        expect(sut: sut, completeWith: .success(pokemon1.model.item)) {
+            let json = makeItemsJSONFromItems(pokemon1.model)
             client.complete(withStatusCode: 200, data: json)
         }
     }
@@ -85,31 +65,31 @@ final class PokemonLoaderTests: XCTestCase {
     // MARK: Helpers
     
     private func makeSUT(
-        url: URL = URL(string: "http://any-url.com")!,
         file: StaticString = #filePath,
         line: UInt = #line
-    ) -> (sut: PokemonsLoader, client: HTTPClientSpy) {
+    ) -> (sut: PokemonLoader, client: HTTPClientSpy) {
         let client = HTTPClientSpy()
-        let sut = PokemonsLoader(url: url, client: client)
+        let sut = PokemonLoader(client: client)
         trackForMemoryLeak(instance: client, file: file, line: line)
         trackForMemoryLeak(instance: sut, file: file, line: line)
         return (sut, client)
     }
     
     private func expect(
-        sut: PokemonsLoader,
-        completeWith expectedResult: PokemonsLoader.Result,
+        sut: PokemonLoader,
+        completeWith expectedResult: PokemonLoader.Result,
         action: () -> Void,
+        url: URL = URL(string: "http://any-url.com")!,
         file: StaticString = #filePath,
         line: UInt = #line
     ) {
         let exp = expectation(description: "waiting for completion")
-        sut.load { receivedResult in
+        sut.load(url: url) { receivedResult in
             switch (receivedResult, expectedResult) {
             case let (.success(receivedItems), .success(expectedItems)):
                 XCTAssertEqual(receivedItems, expectedItems, file: file, line: line)
             case let (.failure(receivedError), .failure(expectedError)):
-                XCTAssertEqual(receivedError as! PokemonsLoader.Error, expectedError as! PokemonsLoader.Error, file: file, line: line)
+                XCTAssertEqual(receivedError as! PokemonLoader.Error, expectedError as! PokemonLoader.Error, file: file, line: line)
             default: XCTFail("Expected result \(expectedResult) got \(receivedResult) instead", file: file, line: line)
             }
             exp.fulfill()
@@ -141,10 +121,9 @@ final class PokemonLoaderTests: XCTestCase {
         return (item, json)
     }
 
-    private func makeItemsJSONFromItems(_ items: [Item]) -> Data {
+    private func makeItemsJSONFromItems(_ item: Item) -> Data {
         let encoder = JSONEncoder()
-        let itemsJSON = ["items": items]
-        let jsonData = try! encoder.encode(itemsJSON)
+        let jsonData = try! encoder.encode(item)
         return jsonData
     }
 

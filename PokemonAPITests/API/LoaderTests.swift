@@ -18,19 +18,19 @@ final class LoaderTests: XCTestCase {
     
     func test_load_requestDataFromURL() {
         let url = anyURL()
-        let (sut, client) = makeSUT(url: url)
+        let (sut, client) = makeSUT()
         
-        sut.load { _ in }
+        sut.load(url: url) { _ in }
         
         XCTAssertEqual(client.requestedURLs, [url])
     }
     
     func test_loadTwice_requestDataFromURL() {
         let url = anyURL()
-        let (sut, client) = makeSUT(url: url)
+        let (sut, client) = makeSUT()
 
-        sut.load { _ in }
-        sut.load { _ in }
+        sut.load(url: url) { _ in }
+        sut.load(url: url) { _ in }
         
         XCTAssertEqual(client.requestedURLs, [url, url])
     }
@@ -68,10 +68,10 @@ final class LoaderTests: XCTestCase {
     func test_load_doesNotDeliverResultAfterSUTInstancesHasBeenDeallocated() {
         let url = anyURL()
         let client = HTTPClientSpy()
-        var sut: Loader<String>? = Loader<String>(url: url, client: client, mapper: { _, _ in "any" })
+        var sut: Loader<String>? = Loader<String>(client: client, mapper: { _, _ in "any" })
         
         var capturedResults = [Loader<String>.Result]()
-        sut?.load { capturedResults.append($0) }
+        sut?.load(url: url) { capturedResults.append($0) }
         
         sut = nil
         client.complete(withStatusCode: 200, data: makeItemsJSON([:]))
@@ -83,13 +83,12 @@ final class LoaderTests: XCTestCase {
     // MARK: Helpers
     
     private func makeSUT(
-        url: URL = URL(string: "http://any-url.com")!,
         mapper: @escaping Loader<String>.Mapper = { _, _ in "any" },
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> (sut: Loader<String>, client: HTTPClientSpy) {
         let client = HTTPClientSpy()
-        let sut = Loader<String>(url: url, client: client, mapper: mapper)
+        let sut = Loader<String>(client: client, mapper: mapper)
         trackForMemoryLeak(instance: client, file: file, line: line)
         trackForMemoryLeak(instance: sut, file: file, line: line)
         return (sut, client)
@@ -99,11 +98,12 @@ final class LoaderTests: XCTestCase {
         sut: Loader<String>,
         completeWith expectedResult: Loader<String>.Result,
         action: () -> Void,
+        url: URL = URL(string: "http://any-url.com")!,
         file: StaticString = #filePath,
         line: UInt = #line
     ) {
         let exp = expectation(description: "waiting for completion")
-        sut.load { receivedResult in
+        sut.load(url: url) { receivedResult in
             switch (receivedResult, expectedResult) {
             case let (.success(receivedItems), .success(expectedItems)):
                 XCTAssertEqual(receivedItems, expectedItems, file: file, line: line)
