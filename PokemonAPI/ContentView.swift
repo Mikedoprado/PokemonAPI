@@ -14,10 +14,8 @@ struct ContentView: View {
     var body: some View {
         NavigationPokeList(
             list: viewModel.pokeList,
-            textfieldSearch: $viewModel.textSearching)
-            .onAppear {
-                viewModel.fetchPokemons()
-            }
+            textfieldSearch: $viewModel.textSearching
+        )
     }
 }
 

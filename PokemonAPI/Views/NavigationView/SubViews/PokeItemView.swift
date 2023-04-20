@@ -18,7 +18,6 @@ struct PokeItemView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 20)
                     .frame(maxWidth: .infinity)
-                    .frame(height: 150)
                     .foregroundColor(PokeColor.white.color)
                     .padding(.bottom, 0)
                 WebImage(url: URL(string: pokemonImage))

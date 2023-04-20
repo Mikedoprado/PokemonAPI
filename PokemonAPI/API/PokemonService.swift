@@ -20,26 +20,20 @@ final class PokemonService {
         self.pokemonListloader = pokemonListloader
     }
     
-    enum Error: Swift.Error {
-        case invalidURL
-        case invalidData
-    }
-    
-    func getPokeItemList(completion: @escaping (Result<[Pokemon], Error>) -> Void) {
-        let url = Endpoint.getPokeList.url(baseURL: baseURL)
+    func getPokeItemList(url: URL, completion: @escaping (Result<[Pokemon], Error>) -> Void) {
         pokeItemListLoader.load(url: url) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case let .success(pokeList):
                 self.getPokemonList(pokemonURLs: pokeList.map { $0.url }) { completion($0) }
-            case .failure:
-                completion(.failure(Error.invalidData))
+            case let .failure(error):
+                completion(.failure(error))
             }
         }
     }
 
     
-    private func getPokemonList(pokemonURLs: [String], completion: @escaping (Result<[Pokemon], Error>) -> Void) {
+    func getPokemonList(pokemonURLs: [String], completion: @escaping (Result<[Pokemon], Error>) -> Void) {
         let dispatchGroup = DispatchGroup()
         var loadedPokemon: [Pokemon] = []
         var errors: [Error] = []
@@ -53,8 +47,8 @@ final class PokemonService {
                 switch result {
                 case let .success(pokemon):
                     loadedPokemon.append(pokemon)
-                case .failure:
-                    errors.append(Error.invalidData)
+                case let .failure(error):
+                    errors.append(error)
                 }
             }
         }
