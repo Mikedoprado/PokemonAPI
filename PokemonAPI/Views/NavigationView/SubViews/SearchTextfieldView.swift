@@ -13,16 +13,15 @@ struct SearchTextfieldView: View {
     var body: some View {
         HStack {
             ZStack {
-                RoundedRectangle(cornerRadius: 10)
-                    .foregroundColor(.white)
-                    .frame(height: 40)
                 TextField("Search by name", text: $textfieldSearch)
+                    .modifier(CustomFontModifier(size: .subtitle))
+                    .padding(.leading, 20)
                     .autocorrectionDisabled()
-                    .frame(height: 40)
+                    .frame(height: 50)
                     .foregroundColor(PokeColor.dragon.color)
                     .background(Color.white)
                     .cornerRadius(10)
-                    .padding(20)
+                    .padding(.vertical, 20)
                     .overlay(cleanButton)
             }.padding(.horizontal, 20)
         }.background(Color.pink)

@@ -32,7 +32,6 @@ final class PokemonService: FetchingPokemonProtocol {
         }
     }
 
-    
     func getPokemonList(pokemonURLs: [String], completion: @escaping (Result<[Pokemon], Error>) -> Void) {
         let dispatchGroup = DispatchGroup()
         var loadedPokemon: [Pokemon] = []

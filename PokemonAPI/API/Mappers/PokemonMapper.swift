@@ -8,14 +8,7 @@
 import Foundation
 
 final class PokemonMapper {
-    
-    private struct Root: Decodable {
-        let items: [Item]
-        var pokemonList: [Pokemon] {
-            items.map { $0.pokemon }
-        }
-    }
-    
+
     struct Item: Codable {
         let id: Int
         let name: String?

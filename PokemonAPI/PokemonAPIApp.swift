@@ -11,7 +11,6 @@ let baseURL = URL(string: "https://pokeapi.co/api")!
 
 @main
 struct PokemonAPIApp: App {
-    let persistenceController = PersistenceController.shared
     @StateObject var viewModel = FactoryPokemonListViewModel().makeViewModel()
     @StateObject var deviceOrientationViewModel = DeviceOrientationViewModel()
 
@@ -20,8 +19,9 @@ struct PokemonAPIApp: App {
             NavigationPokeList(
                 list: viewModel.pokeList,
                 textfieldSearch: $viewModel.textSearching,
+                isLoading: $viewModel.isLoading,
                 viewModel: deviceOrientationViewModel
-            ).environment(\.managedObjectContext, persistenceController.container.viewContext)
+            )
         }
     }
 }

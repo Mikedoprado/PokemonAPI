@@ -12,6 +12,7 @@ final class PokemonListViewModel: ObservableObject {
     
     @Published var pokeList: [Pokemon] = []
     @Published var textSearching: String = ""
+    @Published var isLoading: Bool = false
     private var cancellables = Set<AnyCancellable>()
     private var fetchList: [Pokemon] = []
     private var service: FetchingPokemonProtocol
@@ -40,7 +41,7 @@ final class PokemonListViewModel: ObservableObject {
     private func searchingByText() {
         $textSearching
             .filter { !$0.isEmpty }
-            .debounce(for: .seconds(2.0), scheduler: DispatchQueue.main)
+            .debounce(for: .seconds(1.5), scheduler: DispatchQueue.main)
             .sink { [weak self] searchText in
                 let urlString = Endpoint.getPokemonByName(searchText.lowercased()).url(baseURL: baseURL).absoluteString
                 self?.searchPokemon(urlString: urlString)
@@ -49,6 +50,7 @@ final class PokemonListViewModel: ObservableObject {
     }
     
     private func fetchPokemons(url: URL) {
+        isLoading = true
         service.getPokeItemList(url: url, completion: { [weak self] result in
             guard let self = self else { return }
             self.mapResult(result: result) { pokemons in
@@ -56,16 +58,19 @@ final class PokemonListViewModel: ObservableObject {
                 self.fetchList = list
                 DispatchQueue.main.async {
                     self.pokeList = self.fetchList
+                    self.isLoading = false
                 }
             }
         })
     }
     
     private func searchPokemon(urlString: String) {
+        isLoading = true
         service.getPokemonList(pokemonURLs: [urlString]) { [weak self] result in
             self?.mapResult(result: result) { pokemons in
                 DispatchQueue.main.async {
                     self?.pokeList = pokemons
+                    self?.isLoading = false
                 }
             }
         }
