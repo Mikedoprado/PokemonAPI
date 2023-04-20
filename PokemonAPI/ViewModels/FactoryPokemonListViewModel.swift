@@ -8,7 +8,6 @@
 import Foundation
 
 final class FactoryPokemonListViewModel {
-    private let url = Endpoint.getPokeList.url(baseURL: baseURL)
     private let session = URLSession(configuration: .ephemeral)
     private lazy var client = URLSessionHTTPClient(session: session)
     private lazy var pokeItemListLoader = PokeItemsLoader(client: client)

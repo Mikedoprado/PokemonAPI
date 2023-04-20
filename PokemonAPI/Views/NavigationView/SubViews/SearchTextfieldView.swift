@@ -17,13 +17,29 @@ struct SearchTextfieldView: View {
                     .foregroundColor(.white)
                     .frame(height: 40)
                 TextField("Search", text: $textfieldSearch)
+                    .autocorrectionDisabled()
                     .frame(height: 40)
                     .foregroundColor(PokeColor.dragon.color)
                     .background(Color.white)
                     .cornerRadius(10)
                     .padding(20)
+                    .overlay(cleanButton)
+                        
             }.padding(.horizontal, 20)
         }.background(Color.pink)
+    }
+    
+    private var cleanButton: some View {
+        Button(action: { self.textfieldSearch = "" }) {
+            HStack {
+                Spacer()
+                Image(systemName: "xmark.circle.fill")
+                    .foregroundColor(PokeColor.normal.color.opacity(0.5))
+                    .opacity(textfieldSearch.isEmpty ? 0 : 1)
+            }
+        }
+        .padding(.trailing, 10)
+        .transition(.move(edge: .trailing))
     }
 }
 

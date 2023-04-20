@@ -61,7 +61,7 @@ final class PokemonListViewModel: ObservableObject {
         })
     }
     
-    func searchPokemon(url: String) {
+    private func searchPokemon(url: String) {
         service.getPokemonList(pokemonURLs: [url]) { [weak self] result in
             self?.mapResult(result: result) { pokemons in
                 DispatchQueue.main.async {
