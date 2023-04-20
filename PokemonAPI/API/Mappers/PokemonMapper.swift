@@ -31,7 +31,8 @@ final class PokemonMapper {
                 types: types?.map { $0.type.name },
                 abilities: abilities?.map { $0.ability.name },
                 sprites: sprites?.frontDefault,
-                moves: moves?.map { $0.move.name })
+                moves: moves?.map { $0.move.name },
+                artwork: sprites?.other.officialArtWork.frontDefault)
         }
     }
 
@@ -52,6 +53,24 @@ final class PokemonMapper {
     }
 
     struct Sprites: Codable {
+        let frontDefault: String
+        let other: Other
+
+        enum CodingKeys: String, CodingKey {
+            case frontDefault = "front_default"
+            case other
+        }
+    }
+    
+    struct Other: Codable {
+        let officialArtWork: OfficialArtWork
+        
+        enum CodingKeys: String, CodingKey {
+            case officialArtWork = "official-artwork"
+        }
+    }
+    
+    struct OfficialArtWork: Codable {
         let frontDefault: String
 
         enum CodingKeys: String, CodingKey {

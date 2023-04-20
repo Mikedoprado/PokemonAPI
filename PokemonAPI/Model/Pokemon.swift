@@ -14,6 +14,7 @@ struct Pokemon {
     let abilities: [String]?
     let sprites: String?
     let moves: [String]?
+    let artwork: String?
 }
 
 extension Pokemon: Equatable {

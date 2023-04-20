@@ -21,7 +21,7 @@ struct GridView: View {
                         abilities: pokemon.abilities ?? [],
                         moves: pokemon.moves ?? [],
                         name: pokemon.name ?? "",
-                        image: pokemon.sprites ?? "")
+                        image: pokemon.artwork ?? pokemon.sprites ?? "")
                 ) {
                     PokeItemView(
                         name: pokemon.name ?? "",

@@ -54,7 +54,12 @@ final class PokemonLoaderTests: XCTestCase {
             name: "Pikachu",
             types: [Types(type: TypeInfo(name: "Electric"))],
             abilities: [Ability(ability: AbilityInfo(name: "Static"))],
-            sprites: Sprites(frontDefault: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png"), moves: [Move(move: MoveInfo(name: "Thunderbolt"))])
+            sprites: Sprites(
+                frontDefault: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png",
+                other: PokemonLoaderTests.Other(
+                    officialArtWork: OfficialArtWork(
+                        frontDefault: "somo artwork"))),
+            moves: [Move(move: MoveInfo(name: "Thunderbolt"))])
         
         expect(sut: sut, completeWith: .success(pokemon1.model.item)) {
             let json = makeItemsJSONFromItems(pokemon1.model)
@@ -142,7 +147,8 @@ final class PokemonLoaderTests: XCTestCase {
                 types: types.map { $0.type.name },
                 abilities: abilities.map { $0.ability.name },
                 sprites: sprites.frontDefault,
-                moves: moves.map { $0.move.name })
+                moves: moves.map { $0.move.name },
+                artwork: sprites.other.officialArtWork.frontDefault)
         }
     }
 
@@ -163,6 +169,24 @@ final class PokemonLoaderTests: XCTestCase {
     }
 
     struct Sprites: Codable {
+        let frontDefault: String
+        let other: Other
+
+        enum CodingKeys: String, CodingKey {
+            case frontDefault = "front_default"
+            case other
+        }
+    }
+    
+    struct Other: Codable {
+        let officialArtWork: OfficialArtWork
+        
+        enum CodingKeys: String, CodingKey {
+            case officialArtWork = "official-artwork"
+        }
+    }
+    
+    struct OfficialArtWork: Codable {
         let frontDefault: String
 
         enum CodingKeys: String, CodingKey {
