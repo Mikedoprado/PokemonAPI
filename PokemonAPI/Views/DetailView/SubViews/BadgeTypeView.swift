@@ -15,7 +15,7 @@ struct BadgeTypeView: View {
             RoundedRectangle(cornerRadius: 25)
                 .foregroundColor(PokeColor(rawValue: type.lowercased())?.color)
             HStack {
-                PokemonTypeIconView(icon: type.lowercased())
+                PokemonTypeIconView(icon: type.lowercased(), size: 30)
                     .padding(.vertical, 8)
                     .padding(.leading, 8)
                 Text(type.capitalized)

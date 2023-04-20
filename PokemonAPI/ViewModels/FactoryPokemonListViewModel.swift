@@ -17,6 +17,7 @@ final class FactoryPokemonListViewModel {
         return PokemonListViewModel(
             service: PokemonService(
                 pokeListLoader: pokeItemListLoader,
-                pokemonListloader: pokemonLoader))
+                pokemonListloader: pokemonLoader)
+        )
     }
 }

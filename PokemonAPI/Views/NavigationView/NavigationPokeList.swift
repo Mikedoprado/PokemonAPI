@@ -8,18 +8,16 @@
 import SwiftUI
 
 struct NavigationPokeList: View {
-    
     var list: [Pokemon]
-    var filter: [Pokemon] = []
     @Binding var textfieldSearch: String
-    @State var isSearching: Bool = false
+    @StateObject var viewModel: DeviceOrientationViewModel
     
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
                 SearchTextfieldView(textfieldSearch: $textfieldSearch)
                 ScrollView {
-                    GridView(list: list)
+                    GridView(viewModel: viewModel, list: list)
                 }
                 .background(PokeColor.dark.color)
                 .navigationTitle("Pokedex")
@@ -34,6 +32,9 @@ struct NavigationPokeList: View {
 
 struct NavigationPokeList_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationPokeList(list: [], textfieldSearch: .constant(""))
+        NavigationPokeList(
+            list: [],
+            textfieldSearch: .constant(""),
+            viewModel: DeviceOrientationViewModel())
     }
 }

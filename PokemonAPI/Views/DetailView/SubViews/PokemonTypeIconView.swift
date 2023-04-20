@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PokemonTypeIconView: View {
     var icon: String
-    
+    var size: CGFloat
     var body: some View {
         ZStack {
             Circle()
@@ -19,12 +19,12 @@ struct PokemonTypeIconView: View {
                 .aspectRatio(contentMode: .fit)
                 .padding(5)
         }
-        .frame(width: 30, height: 30)
+        .frame(width: size, height: size)
     }
 }
 
 struct PokemonTypeIconView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonTypeIconView(icon: "grass")
+        PokemonTypeIconView(icon: "grass", size: 30)
     }
 }

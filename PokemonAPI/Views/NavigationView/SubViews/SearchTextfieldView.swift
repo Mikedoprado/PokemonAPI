@@ -16,7 +16,7 @@ struct SearchTextfieldView: View {
                 RoundedRectangle(cornerRadius: 10)
                     .foregroundColor(.white)
                     .frame(height: 40)
-                TextField("Search", text: $textfieldSearch)
+                TextField("Search by name", text: $textfieldSearch)
                     .autocorrectionDisabled()
                     .frame(height: 40)
                     .foregroundColor(PokeColor.dragon.color)
@@ -24,7 +24,6 @@ struct SearchTextfieldView: View {
                     .cornerRadius(10)
                     .padding(20)
                     .overlay(cleanButton)
-                        
             }.padding(.horizontal, 20)
         }.background(Color.pink)
     }

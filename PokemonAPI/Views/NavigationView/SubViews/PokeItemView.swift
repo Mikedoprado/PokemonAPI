@@ -15,32 +15,20 @@ struct PokeItemView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 20)
-                    .frame(maxWidth: .infinity)
-                    .foregroundColor(PokeColor.white.color)
-                    .padding(.bottom, 0)
-                WebImage(url: URL(string: pokemonImage))
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-            }
+            PokemonImage(pokemonImage: pokemonImage)
             VStack(alignment: .leading, spacing: 8) {
                 Text(name.capitalized)
                     .modifier(CustomFontModifier(size: .caption))
                     .fontWeight(.regular)
-                    .foregroundColor(.gray)
+                    .foregroundColor(PokeColor.dragon.color)
                 HStack(spacing: 10) {
                     ForEach(type, id: \.self) { type in
                         ZStack(alignment: .center) {
                             Circle()
                                 .foregroundColor(PokeColor(rawValue: type.lowercased())?.color)
-                            PokemonTypeIconView(icon: type.lowercased())
-//                            Text(type.capitalized)
-//                                .modifier(CustomFontModifier(size: .caption))
-//                                .fontWeight(.regular)
-//                                .foregroundColor(.white)
-//                                .padding(.vertical, 3)
-                        }.frame(width: 40, height: 40)
+                            PokemonTypeIconView(icon: type.lowercased(), size: 20)
+                        }
+                        .frame(width: 30, height: 30)
                     }
                 }
             }.padding(.horizontal, 10)

@@ -15,7 +15,7 @@ struct PokemonImage: View {
         ZStack {
             RoundedRectangle(cornerRadius: 20)
                 .frame(maxWidth: .infinity)
-                .foregroundColor(.white)
+                .foregroundColor(PokeColor.white.color)
             WebImage(url: URL(string: pokemonImage))
                 .resizable()
                 .aspectRatio(contentMode: .fit)

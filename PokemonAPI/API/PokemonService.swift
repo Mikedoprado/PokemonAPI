@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class PokemonService {
+final class PokemonService: FetchingPokemonProtocol {
     
     private let pokeItemListLoader: PokeItemsLoader
     private let pokemonListloader: PokemonLoader

@@ -14,13 +14,13 @@ final class PokemonListViewModel: ObservableObject {
     @Published var textSearching: String = ""
     private var cancellables = Set<AnyCancellable>()
     private var fetchList: [Pokemon] = []
-    private var service: PokemonService
+    private var service: FetchingPokemonProtocol
     
     private var urlPokelist: URL {
         Endpoint.getPokeList.url(baseURL: baseURL)
     }
 
-    init(service: PokemonService) {
+    init(service: FetchingPokemonProtocol) {
         self.service = service
         searchingByText()
         setInitialValues()
@@ -42,13 +42,13 @@ final class PokemonListViewModel: ObservableObject {
             .filter { !$0.isEmpty }
             .debounce(for: .seconds(2.0), scheduler: DispatchQueue.main)
             .sink { [weak self] searchText in
-                let url = Endpoint.getPokemonByName(searchText.lowercased()).url(baseURL: baseURL).absoluteString
-                self?.searchPokemon(url: url)
+                let urlString = Endpoint.getPokemonByName(searchText.lowercased()).url(baseURL: baseURL).absoluteString
+                self?.searchPokemon(urlString: urlString)
             }
             .store(in: &cancellables)
     }
     
-    func fetchPokemons(url: URL) {
+    private func fetchPokemons(url: URL) {
         service.getPokeItemList(url: url, completion: { [weak self] result in
             guard let self = self else { return }
             self.mapResult(result: result) { pokemons in
@@ -61,8 +61,8 @@ final class PokemonListViewModel: ObservableObject {
         })
     }
     
-    private func searchPokemon(url: String) {
-        service.getPokemonList(pokemonURLs: [url]) { [weak self] result in
+    private func searchPokemon(urlString: String) {
+        service.getPokemonList(pokemonURLs: [urlString]) { [weak self] result in
             self?.mapResult(result: result) { pokemons in
                 DispatchQueue.main.async {
                     self?.pokeList = pokemons
@@ -76,7 +76,7 @@ final class PokemonListViewModel: ObservableObject {
         case let .success(pokemons):
             action(pokemons)
         case let .failure(error):
-            print(error.localizedDescription)
+            print(error)
         }
     }
     

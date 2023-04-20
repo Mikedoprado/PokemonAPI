@@ -9,11 +9,11 @@ import SwiftUI
 
 struct GridView: View {
     
-    let columnas = [GridItem(.flexible()), GridItem(.flexible())]
+    @StateObject var viewModel: DeviceOrientationViewModel
     var list: [Pokemon]
     
     var body: some View {
-        LazyVGrid(columns: columnas, spacing: 10) {
+        LazyVGrid(columns: viewModel.setColumns()) {
             ForEach(list, id: \.id) { pokemon in
                 NavigationLink(
                     destination: PokemonDetail(
@@ -36,6 +36,6 @@ struct GridView: View {
 
 struct GridView_Previews: PreviewProvider {
     static var previews: some View {
-        GridView(list: [])
+        GridView(viewModel: DeviceOrientationViewModel(), list: [])
     }
 }
