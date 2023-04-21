@@ -63,17 +63,6 @@ final class PokemonListViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    private func searchingByName() {
-        $textSearching
-            .filter { !$0.isEmpty }
-            .debounce(for: .seconds(1.5), scheduler: DispatchQueue.main)
-            .sink { [weak self] searchText in
-                let urlString = Endpoint.getPokemonByName(searchText.lowercased()).url(baseURL: baseURL).absoluteString
-                self?.searchPokemon(urlString: urlString)
-            }
-            .store(in: &cancellables)
-    }
-    
     private func searchingByNameOrAbility() {
         $textSearching
             .filter { !$0.isEmpty }
@@ -113,7 +102,7 @@ final class PokemonListViewModel: ObservableObject {
                 let list = pokemons.sorted { $0.id < $1.id }
                 self.fetchList = list
                 DispatchQueue.main.async {
-                    self.pokeList = pokemons
+                    self.pokeList = list
                     self.isLoading = false
                     self.connectivity = false
                 }
