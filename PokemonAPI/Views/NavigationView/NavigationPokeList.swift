@@ -15,6 +15,7 @@ struct NavigationPokeList: View {
     @Binding var invalidSearch: Bool
     @Binding var connectivity: Bool
     @Binding var isLandscape: Bool
+    @Binding var filterBy: TabBarItem
     
     var body: some View {
         NavigationView {
@@ -23,7 +24,8 @@ struct NavigationPokeList: View {
                     SearchTextfieldView(
                         textfieldSearch: $textfieldSearch,
                         invalidSearch: $invalidSearch,
-                        connectivity: $connectivity)
+                        connectivity: $connectivity,
+                        filterBy: $filterBy)
                 }
                 ZStack {
                     ScrollView {
@@ -41,9 +43,9 @@ struct NavigationPokeList: View {
                     .toolbarColorScheme(.dark, for: .navigationBar)
                     .toolbarBackground(.pink, for: .navigationBar)
                     .toolbarBackground(.visible, for: .navigationBar)
-                    if isLoading {
-                        LoadingView(isLoading: $isLoading)
-                    }
+//                    if isLoading {
+//                        LoadingView(isLoading: $isLoading)
+//                    }
                 }
             }
         }
@@ -58,6 +60,7 @@ struct NavigationPokeList_Previews: PreviewProvider {
             isLoading: .constant(true),
             invalidSearch: .constant(false),
             connectivity: .constant(true),
-            isLandscape: .constant(false))
+            isLandscape: .constant(false),
+            filterBy: .constant(.name))
     }
 }

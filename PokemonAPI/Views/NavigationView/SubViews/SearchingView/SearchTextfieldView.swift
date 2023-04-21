@@ -11,21 +11,26 @@ struct SearchTextfieldView: View {
     @Binding var textfieldSearch: String
     @Binding var invalidSearch: Bool
     @Binding var connectivity: Bool
+    @Binding var filterBy: TabBarItem
+    
     var body: some View {
         HStack {
             ZStack {
                 VStack {
-                    TextField("Search by name", text: $textfieldSearch)
-                        .modifier(CustomFontModifier(size: .subtitle))
-                        .padding(.leading, 20)
-                        .autocorrectionDisabled()
-                        .frame(height: 50)
-                        .foregroundColor(PokeColor.dragon.color)
-                        .background(Color.white)
-                        .cornerRadius(10)
-                        .padding(.vertical, 20)
-                        .disabled(!connectivity)
-                        .overlay(cleanButton)
+                    ZStack {
+                        TextField("Search by \(filterBy.title)", text: $textfieldSearch)
+                            .modifier(CustomFontModifier(size: .subtitle))
+                            .padding(.leading, 20)
+                            .autocorrectionDisabled()
+                            .frame(height: 50)
+                            .foregroundColor(PokeColor.dragon.color)
+                            .background(Color.white)
+                            .cornerRadius(10)
+                            .padding(.top, 20)
+                            .disabled(!connectivity)
+                            .overlay(cleanButton.padding(.top, 20))
+                    }
+                    SearchingFilterView(selection: $filterBy)
                     if invalidSearch || !connectivity {
                         HStack {
                             Spacer()
@@ -61,8 +66,9 @@ struct SearchTextfieldView: View {
 struct SearchTextfieldView_Previews: PreviewProvider {
     static var previews: some View {
         SearchTextfieldView(
-            textfieldSearch: .constant(""),
+            textfieldSearch: .constant("hello"),
             invalidSearch: .constant(true),
-            connectivity: .constant(true))
+            connectivity: .constant(true),
+            filterBy: .constant(.name))
     }
 }

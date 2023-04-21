@@ -10,7 +10,7 @@ import Foundation
 final class PokemonMapper {
 
     struct Item: Codable {
-        let id: Int
+        let id: Int?
         let name: String?
         let abilities: [Ability]?
         let moves: [Move]?
@@ -19,7 +19,7 @@ final class PokemonMapper {
         
         var pokemon: Pokemon {
             return Pokemon(
-                id: id,
+                id: id ?? 0,
                 name: name,
                 types: types?.map { $0.type.name },
                 abilities: abilities?.map { $0.ability.name },

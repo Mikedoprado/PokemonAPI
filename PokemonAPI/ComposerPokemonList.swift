@@ -18,7 +18,8 @@ struct ComposerPokemonList {
             isLoading: $pokemonListViewModel.isLoading,
             invalidSearch: $pokemonListViewModel.invalidSearch,
             connectivity: $pokemonListViewModel.connectivity,
-            isLandscape: $deviceOrientationViewModel.isLandscape
+            isLandscape: $deviceOrientationViewModel.isLandscape,
+            filterBy: $pokemonListViewModel.filterBy
         )
     }
 }
