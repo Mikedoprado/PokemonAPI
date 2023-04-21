@@ -25,7 +25,8 @@ struct PokemonAPIApp: App {
                     list: viewModel.pokeList,
                     textfieldSearch: $viewModel.textSearching,
                     isLoading: $viewModel.isLoading,
-                    viewModel: deviceOrientationViewModel
+                    viewModel: deviceOrientationViewModel,
+                    invalidSearch: $viewModel.invalidSearch
                 )
             }
         }

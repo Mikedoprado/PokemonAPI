@@ -13,6 +13,8 @@ final class PokemonListViewModel: ObservableObject {
     @Published var pokeList: [Pokemon] = []
     @Published var textSearching: String = ""
     @Published var isLoading: Bool = false
+    @Published var invalidSearch: Bool = false
+    
     private var cancellables = Set<AnyCancellable>()
     private var fetchList: [Pokemon] = []
     private var service: FetchingPokemonProtocol
@@ -23,32 +25,11 @@ final class PokemonListViewModel: ObservableObject {
 
     init(service: FetchingPokemonProtocol) {
         self.service = service
-        searchingByText()
+        searchingByName()
         setInitialValues()
         fetchPokemons(url: urlPokelist)
     }
-    
-    private func setInitialValues() {
-        $textSearching
-            .filter { $0.isEmpty }
-            .sink { [weak self] _ in
-                guard let self = self else { return }
-                self.pokeList = self.fetchList
-            }
-            .store(in: &cancellables)
-    }
-    
-    private func searchingByText() {
-        $textSearching
-            .filter { !$0.isEmpty }
-            .debounce(for: .seconds(1.5), scheduler: DispatchQueue.main)
-            .sink { [weak self] searchText in
-                let urlString = Endpoint.getPokemonByName(searchText.lowercased()).url(baseURL: baseURL).absoluteString
-                self?.searchPokemon(urlString: urlString)
-            }
-            .store(in: &cancellables)
-    }
-    
+
     private func fetchPokemons(url: URL) {
         isLoading = true
         service.getPokeItemList(url: url, completion: { [weak self] result in
@@ -64,13 +45,34 @@ final class PokemonListViewModel: ObservableObject {
         })
     }
     
+    private func setInitialValues() {
+        $textSearching
+            .filter { $0.isEmpty }
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                self.pokeList = self.fetchList
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func searchingByName() {
+        $textSearching
+            .filter { !$0.isEmpty }
+            .debounce(for: .seconds(1.5), scheduler: DispatchQueue.main)
+            .sink { [weak self] searchText in
+                let urlString = Endpoint.getPokemonByName(searchText.lowercased()).url(baseURL: baseURL).absoluteString
+                self?.searchPokemon(urlString: urlString)
+            }
+            .store(in: &cancellables)
+    }
+
     private func searchPokemon(urlString: String) {
-        isLoading = true
         service.getPokemonList(pokemonURLs: [urlString]) { [weak self] result in
             self?.mapResult(result: result) { pokemons in
                 DispatchQueue.main.async {
                     self?.pokeList = pokemons
                     self?.isLoading = false
+                    self?.invalidSearch = false
                 }
             }
         }
@@ -81,7 +83,11 @@ final class PokemonListViewModel: ObservableObject {
         case let .success(pokemons):
             action(pokemons)
         case let .failure(error):
-            print(error)
+            if error as? Loader<Pokemon>.Error == Loader<Pokemon>.Error.invalidData {
+                self.invalidSearch = true
+            } else {
+                print("this error is connectivity")
+            }
         }
     }
     

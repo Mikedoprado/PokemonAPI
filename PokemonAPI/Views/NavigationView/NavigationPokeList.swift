@@ -11,19 +11,28 @@ struct NavigationPokeList: View {
     var list: [Pokemon]
     @Binding var textfieldSearch: String
     @Binding var isLoading: Bool
+    @State var isSearching: Bool = false
     @StateObject var viewModel: DeviceOrientationViewModel
-    
+    @Binding var invalidSearch: Bool
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                SearchTextfieldView(textfieldSearch: $textfieldSearch)
+                if isSearching {
+                    SearchTextfieldView(textfieldSearch: $textfieldSearch, invalidSearch: $invalidSearch)
+                }
                 ZStack {
                     ScrollView {
                         GridView(viewModel: viewModel, list: list)
                     }
+                    .toolbar(content: {
+                        Button(action: {isSearching.toggle()}) {
+                            Image(systemName: "magnifyingglass")
+                                .foregroundColor(.white)
+                        }
+                    })
                     .background(PokeColor.dark.color)
                     .navigationTitle("Pokedex")
-                    .navigationBarTitleDisplayMode(.inline)
+                    .navigationBarTitleDisplayMode(.large)
                     .toolbarColorScheme(.dark, for: .navigationBar)
                     .toolbarBackground(.pink, for: .navigationBar)
                     .toolbarBackground(.visible, for: .navigationBar)
@@ -42,23 +51,7 @@ struct NavigationPokeList_Previews: PreviewProvider {
             list: [],
             textfieldSearch: .constant(""),
             isLoading: .constant(true),
-            viewModel: DeviceOrientationViewModel())
-    }
-}
-
-struct LoadingView: View {
-    @Binding var isLoading: Bool
-    var body: some View {
-        if isLoading {
-            ZStack {
-                Rectangle()
-                    .foregroundColor(PokeColor.dark.color)
-                    .opacity(0.8)
-                    .ignoresSafeArea()
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle())
-                    .scaleEffect(2)
-            }
-        }
+            viewModel: DeviceOrientationViewModel(),
+            invalidSearch: .constant(false))
     }
 }

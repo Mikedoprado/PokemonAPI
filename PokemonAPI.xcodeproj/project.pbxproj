@@ -37,6 +37,7 @@
 		188FCC0829EEF97D0080329D /* URLSessionHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188FCC0729EEF97D0080329D /* URLSessionHTTPClient.swift */; };
 		188FCC0A29EEF9BD0080329D /* URLProtocolStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188FCC0929EEF9BD0080329D /* URLProtocolStub.swift */; };
 		189221CC29EDE11F005B6858 /* PokeTypeColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 189221CB29EDE11F005B6858 /* PokeTypeColors.swift */; };
+		18A460AA29F2C39F00555136 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A460A929F2C39F00555136 /* LoadingView.swift */; };
 		18CA4C9729ED8975008EC544 /* ContainerInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CA4C9629ED8975008EC544 /* ContainerInfoView.swift */; };
 		18CA4C9929ED93F5008EC544 /* pixelmix.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18CA4C9829ED93F5008EC544 /* pixelmix.ttf */; };
 		18CA4C9D29EDA62D008EC544 /* ButtonViewBack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CA4C9C29EDA62D008EC544 /* ButtonViewBack.swift */; };
@@ -101,6 +102,7 @@
 		188FCC0729EEF97D0080329D /* URLSessionHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClient.swift; sourceTree = "<group>"; };
 		188FCC0929EEF9BD0080329D /* URLProtocolStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLProtocolStub.swift; sourceTree = "<group>"; };
 		189221CB29EDE11F005B6858 /* PokeTypeColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokeTypeColors.swift; sourceTree = "<group>"; };
+		18A460A929F2C39F00555136 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		18CA4C9629ED8975008EC544 /* ContainerInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerInfoView.swift; sourceTree = "<group>"; };
 		18CA4C9829ED93F5008EC544 /* pixelmix.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = pixelmix.ttf; sourceTree = "<group>"; };
 		18CA4C9A29ED9531008EC544 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -284,6 +286,7 @@
 				1850C13729EC4A0D00830D76 /* PokeItemView.swift */,
 				1850C13929EC4A6300830D76 /* GridView.swift */,
 				18D657FC29F0AAB500601EAF /* SearchTextfieldView.swift */,
+				18A460A929F2C39F00555136 /* LoadingView.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -458,6 +461,7 @@
 				18F44AE829F1A15900BDBFF0 /* DeviceOrientationViewModel.swift in Sources */,
 				18236F3A29EAF50A00E02799 /* Loader.swift in Sources */,
 				187330F029F1FE700092E85C /* LocalDBPokemon.swift in Sources */,
+				18A460AA29F2C39F00555136 /* LoadingView.swift in Sources */,
 				18CA4C9F29EDA648008EC544 /* PokemonImage.swift in Sources */,
 				188FCC0829EEF97D0080329D /* URLSessionHTTPClient.swift in Sources */,
 				187330F229F2035A0092E85C /* LocalPokemon.swift in Sources */,

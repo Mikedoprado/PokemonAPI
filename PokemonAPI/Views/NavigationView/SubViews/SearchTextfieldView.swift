@@ -9,20 +9,31 @@ import SwiftUI
 
 struct SearchTextfieldView: View {
     @Binding var textfieldSearch: String
-    
+    @Binding var invalidSearch: Bool
     var body: some View {
         HStack {
             ZStack {
-                TextField("Search by name", text: $textfieldSearch)
-                    .modifier(CustomFontModifier(size: .subtitle))
-                    .padding(.leading, 20)
-                    .autocorrectionDisabled()
-                    .frame(height: 50)
-                    .foregroundColor(PokeColor.dragon.color)
-                    .background(Color.white)
-                    .cornerRadius(10)
-                    .padding(.vertical, 20)
-                    .overlay(cleanButton)
+                VStack {
+                    TextField("Search by name", text: $textfieldSearch)
+                        .modifier(CustomFontModifier(size: .subtitle))
+                        .padding(.leading, 20)
+                        .autocorrectionDisabled()
+                        .frame(height: 50)
+                        .foregroundColor(PokeColor.dragon.color)
+                        .background(Color.white)
+                        .cornerRadius(10)
+                        .padding(.vertical, 20)
+                        .overlay(cleanButton)
+                    if invalidSearch {
+                        HStack {
+                            Spacer()
+                            Text("Sorry, we couldn't find it")
+                                .modifier(CustomFontModifier(size: .caption))
+                                .multilineTextAlignment(.trailing)
+                                .foregroundColor(.white)
+                        }.padding(.bottom, 20)
+                    }
+                }
             }.padding(.horizontal, 20)
         }.background(Color.pink)
     }
@@ -43,6 +54,6 @@ struct SearchTextfieldView: View {
 
 struct SearchTextfieldView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchTextfieldView(textfieldSearch: .constant(""))
+        SearchTextfieldView(textfieldSearch: .constant(""), invalidSearch: .constant(true))
     }
 }

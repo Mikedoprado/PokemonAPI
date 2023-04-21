@@ -23,7 +23,7 @@ struct LaunchScreenView: View {
                 }
                 .padding(.bottom, 20)
                 Text("PokemonApp")
-                    .modifier(CustomFontModifier(size: .bigtitle))
+                    .modifier(CustomFontModifier(size: .title))
                     .foregroundColor(.white)
             }
         }
