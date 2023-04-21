@@ -11,8 +11,8 @@ let baseURL = URL(string: "https://pokeapi.co/api")!
 
 @main
 struct PokemonAPIApp: App {
-    @StateObject var pokemonListViewModel = FactoryPokemonListViewModel.makeViewModel()
-    @StateObject var deviceOrientationViewModel = DeviceOrientationViewModel()
+    @ObservedObject var pokemonListViewModel = FactoryPokemonListViewModel.makeViewModel()
+    @ObservedObject var deviceOrientationViewModel = DeviceOrientationViewModel()
     @State var isLaunching = true
     
     var body: some Scene {
@@ -21,14 +21,10 @@ struct PokemonAPIApp: App {
                 LaunchScreenView()
                     .onAppear { launching() }
             } else {
-                NavigationPokeList(
-                    list: pokemonListViewModel.pokeList,
-                    textfieldSearch: $pokemonListViewModel.textSearching,
-                    isLoading: $pokemonListViewModel.isLoading,
-                    invalidSearch: $pokemonListViewModel.invalidSearch,
-                    connectivity: $pokemonListViewModel.connectivity,
-                    isLandscape: $deviceOrientationViewModel.isLandscape
-                )
+                ComposerPokemonList(
+                    pokemonListViewModel: pokemonListViewModel,
+                    deviceOrientationViewModel: deviceOrientationViewModel)
+                .compose()
             }
         }
     }

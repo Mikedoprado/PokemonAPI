@@ -54,7 +54,7 @@ struct SearchTextfieldView: View {
     }
     
     private var message: String {
-        return !connectivity ? "Sorry you don't have internet" : "Sorry, we couldn't find it"
+        return !connectivity ? "Sorry you don't have internet connection" : "Sorry, we couldn't find it"
     }
 }
 

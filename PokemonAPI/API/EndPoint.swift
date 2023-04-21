@@ -11,6 +11,7 @@ enum Endpoint: Equatable {
     case getPokeList
     case getPokemonByName(String)
     case getPokemonByType(String)
+    case getPokemonByAbility(String)
 
     public func url(baseURL: URL) -> URL {
         switch self {
@@ -20,6 +21,8 @@ enum Endpoint: Equatable {
             return baseURL.appendingPathComponent("/v2/pokemon/\(name)")
         case let .getPokemonByType(type):
             return baseURL.appendingPathComponent("/v2/type/\(type)")
+        case let .getPokemonByAbility(ability):
+            return baseURL.appendingPathComponent("/v2/ability/\(ability)")
         }
     }
 }
