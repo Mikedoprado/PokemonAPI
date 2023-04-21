@@ -1,13 +1,13 @@
 //
-//  Pokemon.swift
+//  LocalPokemon.swift
 //  PokemonAPI
 //
-//  Created by Michael Conchado on 15/04/23.
+//  Created by Michael Conchado on 20/04/23.
 //
 
 import Foundation
 
-struct Pokemon {
+struct LocalPokemon: Codable {
     let id: Int
     let name: String?
     let types: [String]?
@@ -15,10 +15,4 @@ struct Pokemon {
     let sprites: String?
     let moves: [String]?
     let artwork: String?
-}
-
-extension Pokemon: Equatable {
-    static func == (lhs: Pokemon, rhs: Pokemon) -> Bool {
-        lhs.id == rhs.id
-    }
 }
