@@ -9,7 +9,7 @@ import SwiftUI
 
 final class DeviceOrientationViewModel: ObservableObject {
     @Published var deviceOrientation = UIDevice.current.orientation
-    
+    @Published var isLandscape: Bool = false
     init() {
         NotificationCenter.default.addObserver(self, selector: #selector(deviceOrientationDidChange), name: UIDevice.orientationDidChangeNotification, object: nil)
     }
@@ -20,13 +20,6 @@ final class DeviceOrientationViewModel: ObservableObject {
     
     @objc private func deviceOrientationDidChange() {
         deviceOrientation = UIDevice.current.orientation
-    }
-    
-    func setColumns() -> [GridItem] {
-        if deviceOrientation.isLandscape {
-            return [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
-        } else {
-            return [GridItem(.flexible()), GridItem(.flexible())]
-        }
+        isLandscape = deviceOrientation.isLandscape
     }
 }

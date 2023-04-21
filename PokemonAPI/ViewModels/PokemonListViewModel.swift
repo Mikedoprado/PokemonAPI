@@ -51,6 +51,7 @@ final class PokemonListViewModel: ObservableObject {
             .sink { [weak self] _ in
                 guard let self = self else { return }
                 self.pokeList = self.fetchList
+                self.invalidSearch = false
             }
             .store(in: &cancellables)
     }
@@ -78,6 +79,19 @@ final class PokemonListViewModel: ObservableObject {
         }
     }
     
+    private func getPokemonsFromLocal() {
+        service.getPokemonsFromLocal { [weak self] result in
+            guard let self = self else { return }
+            self.mapResult(result: result) { pokemons in
+                self.fetchList = pokemons
+                DispatchQueue.main.async {
+                    self.pokeList = pokemons
+                    self.isLoading = false
+                }
+            }
+        }
+    }
+    
     private func mapResult(result: Result<[Pokemon], Error>, action: ([Pokemon]) -> Void) {
         switch result {
         case let .success(pokemons):
@@ -86,7 +100,7 @@ final class PokemonListViewModel: ObservableObject {
             if error as? Loader<Pokemon>.Error == Loader<Pokemon>.Error.invalidData {
                 self.invalidSearch = true
             } else {
-                print("this error is connectivity")
+                self.getPokemonsFromLocal()
             }
         }
     }

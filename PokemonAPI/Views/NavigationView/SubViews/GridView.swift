@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct GridView: View {
-    
-    @StateObject var viewModel: DeviceOrientationViewModel
+
+    @Binding var isLandscape: Bool
     var list: [Pokemon]
     
     var body: some View {
-        LazyVGrid(columns: viewModel.setColumns()) {
+        LazyVGrid(columns: setColumns()) {
             ForEach(list, id: \.id) { pokemon in
                 NavigationLink(
                     destination: PokemonDetail(
@@ -32,10 +32,18 @@ struct GridView: View {
         }
         .padding(10)
     }
+    
+    private func setColumns() -> [GridItem] {
+        if isLandscape {
+            return [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
+        } else {
+            return [GridItem(.flexible()), GridItem(.flexible())]
+        }
+    }
 }
 
 struct GridView_Previews: PreviewProvider {
     static var previews: some View {
-        GridView(viewModel: DeviceOrientationViewModel(), list: [])
+        GridView(isLandscape: .constant(false), list: [])
     }
 }

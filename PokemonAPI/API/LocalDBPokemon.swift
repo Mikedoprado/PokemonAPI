@@ -19,17 +19,16 @@ final class LocalDBPokemon {
         }
     }
     
-    func getPokemons() -> [LocalPokemon]? {
+    func getPokemons(completion: (Result<[Pokemon], Error>) -> Void) {
         if let savedPokemons = userDefaults.object(forKey: "pokemons") as? Data {
             do {
                 let decoder = JSONDecoder()
                 let pokemons = try decoder.decode([LocalPokemon].self, from: savedPokemons)
-                return pokemons
-            } catch {
-                print("Error retrieving pokemons: \(error.localizedDescription)")
+                completion(.success(pokemons.map { LocalPokemonMapper.map(localPokemon: $0) }))
+            } catch let error {
+                completion(.failure(error))
             }
         }
-        return nil
     }
 }
 

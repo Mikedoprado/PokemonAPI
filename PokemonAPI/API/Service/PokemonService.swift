@@ -11,13 +11,16 @@ final class PokemonService: FetchingPokemonProtocol {
     
     private let pokeItemListLoader: PokeItemsLoader
     private let pokemonListloader: PokemonLoader
+    private let localDBPokemon: LocalDBPokemon
     
     init(
         pokeListLoader: PokeItemsLoader,
-        pokemonListloader: PokemonLoader
+        pokemonListloader: PokemonLoader,
+        localDBPokemon: LocalDBPokemon
     ) {
         self.pokeItemListLoader = pokeListLoader
         self.pokemonListloader = pokemonListloader
+        self.localDBPokemon = localDBPokemon
     }
     
     func getPokeItemList(url: URL, completion: @escaping (Result<[Pokemon], Error>) -> Void) {
@@ -51,8 +54,17 @@ final class PokemonService: FetchingPokemonProtocol {
                 }
             }
         }
-        dispatchGroup.notify(queue: .main) {
+        dispatchGroup.notify(queue: .main) { [weak self] in
+            self?.saveToLocalDB(pokemons: loadedPokemon)
             errors.isEmpty ? completion(.success(loadedPokemon)) : completion(.failure(errors[0]))
         }
+    }
+    
+    func getPokemonsFromLocal(completion: @escaping (Result<[Pokemon], Error>) -> Void) {
+        localDBPokemon.getPokemons(completion: completion)
+    }
+    
+    private func saveToLocalDB(pokemons: [Pokemon]) {
+        localDBPokemon.save(pokemons: pokemons.map { LocalPokemon(id: $0.id, name: $0.name, types: $0.types, abilities: $0.abilities, sprites: $0.sprites, moves: $0.moves, artwork: $0.artwork)})
     }
 }

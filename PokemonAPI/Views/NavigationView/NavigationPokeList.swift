@@ -9,11 +9,12 @@ import SwiftUI
 
 struct NavigationPokeList: View {
     var list: [Pokemon]
+    @State var isSearching: Bool = false
     @Binding var textfieldSearch: String
     @Binding var isLoading: Bool
-    @State var isSearching: Bool = false
-    @StateObject var viewModel: DeviceOrientationViewModel
     @Binding var invalidSearch: Bool
+    @Binding var isLandscape: Bool
+    
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
@@ -22,7 +23,7 @@ struct NavigationPokeList: View {
                 }
                 ZStack {
                     ScrollView {
-                        GridView(viewModel: viewModel, list: list)
+                        GridView(isLandscape: $isLandscape, list: list)
                     }
                     .toolbar(content: {
                         Button(action: {isSearching.toggle()}) {
@@ -51,7 +52,7 @@ struct NavigationPokeList_Previews: PreviewProvider {
             list: [],
             textfieldSearch: .constant(""),
             isLoading: .constant(true),
-            viewModel: DeviceOrientationViewModel(),
-            invalidSearch: .constant(false))
+            invalidSearch: .constant(false),
+            isLandscape: .constant(false))
     }
 }
