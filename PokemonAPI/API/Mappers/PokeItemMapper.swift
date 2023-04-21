@@ -16,7 +16,7 @@ struct PokeItemMapper {
             response.statusCode == OK_200,
             let listPokeItems = try? JSONDecoder().decode(ListPokeItems.self, from: data)
         else { throw Loader<[PokeItem]>.Error.invalidData }
-        return  listPokeItems.results
+        return  listPokeItems.results ?? []
     }
 
 }
