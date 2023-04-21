@@ -84,10 +84,12 @@ final class PokemonListViewModel: ObservableObject {
         service.getPokemonsFromLocal { [weak self] result in
             guard let self = self else { return }
             self.mapResult(result: result) { pokemons in
-                self.fetchList = pokemons
+                let list = pokemons.sorted { $0.id < $1.id }
+                self.fetchList = list
                 DispatchQueue.main.async {
-                    self.pokeList = pokemons
+                    self.pokeList = self.fetchList
                     self.isLoading = false
+                    self.connectivity = false
                 }
             }
         }
@@ -101,9 +103,6 @@ final class PokemonListViewModel: ObservableObject {
             if error as? Loader<Pokemon>.Error == Loader<Pokemon>.Error.invalidData {
                 self.invalidSearch = true
             } else {
-                DispatchQueue.main.async {
-                    self.connectivity = false
-                }
                 self.getPokemonsFromLocal()
             }
         }
