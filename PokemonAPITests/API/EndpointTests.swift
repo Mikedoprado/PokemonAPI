@@ -38,4 +38,14 @@ final class EndpointTests: XCTestCase {
 
         XCTAssertEqual(received, expected)
     }
+    
+    func test_getPokemonByAbility_endpointURL() {
+        let baseURL = URL(string: "http://base-url.com")!
+
+        let pokemonType = "stench"
+        let received = Endpoint.getPokemonByAbility(pokemonType).url(baseURL: baseURL)
+        let expected = URL(string: "http://base-url.com/v2/ability/\(pokemonType)")!
+
+        XCTAssertEqual(received, expected)
+    }
 }
