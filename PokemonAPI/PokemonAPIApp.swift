@@ -26,6 +26,7 @@ struct PokemonAPIApp: App {
                     textfieldSearch: $pokemonListViewModel.textSearching,
                     isLoading: $pokemonListViewModel.isLoading,
                     invalidSearch: $pokemonListViewModel.invalidSearch,
+                    connectivity: $pokemonListViewModel.connectivity,
                     isLandscape: $deviceOrientationViewModel.isLandscape
                 )
             }

@@ -14,6 +14,7 @@ final class PokemonListViewModel: ObservableObject {
     @Published var textSearching: String = ""
     @Published var isLoading: Bool = false
     @Published var invalidSearch: Bool = false
+    @Published var connectivity: Bool = true
     
     private var cancellables = Set<AnyCancellable>()
     private var fetchList: [Pokemon] = []
@@ -100,6 +101,9 @@ final class PokemonListViewModel: ObservableObject {
             if error as? Loader<Pokemon>.Error == Loader<Pokemon>.Error.invalidData {
                 self.invalidSearch = true
             } else {
+                DispatchQueue.main.async {
+                    self.connectivity = false
+                }
                 self.getPokemonsFromLocal()
             }
         }

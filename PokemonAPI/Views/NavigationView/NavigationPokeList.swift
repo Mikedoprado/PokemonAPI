@@ -13,13 +13,17 @@ struct NavigationPokeList: View {
     @Binding var textfieldSearch: String
     @Binding var isLoading: Bool
     @Binding var invalidSearch: Bool
+    @Binding var connectivity: Bool
     @Binding var isLandscape: Bool
     
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
                 if isSearching {
-                    SearchTextfieldView(textfieldSearch: $textfieldSearch, invalidSearch: $invalidSearch)
+                    SearchTextfieldView(
+                        textfieldSearch: $textfieldSearch,
+                        invalidSearch: $invalidSearch,
+                        connectivity: $connectivity)
                 }
                 ZStack {
                     ScrollView {
@@ -53,6 +57,7 @@ struct NavigationPokeList_Previews: PreviewProvider {
             textfieldSearch: .constant(""),
             isLoading: .constant(true),
             invalidSearch: .constant(false),
+            connectivity: .constant(true),
             isLandscape: .constant(false))
     }
 }

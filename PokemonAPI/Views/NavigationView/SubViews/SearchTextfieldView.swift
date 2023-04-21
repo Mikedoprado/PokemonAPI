@@ -10,6 +10,7 @@ import SwiftUI
 struct SearchTextfieldView: View {
     @Binding var textfieldSearch: String
     @Binding var invalidSearch: Bool
+    @Binding var connectivity: Bool
     var body: some View {
         HStack {
             ZStack {
@@ -23,11 +24,12 @@ struct SearchTextfieldView: View {
                         .background(Color.white)
                         .cornerRadius(10)
                         .padding(.vertical, 20)
+                        .disabled(!connectivity)
                         .overlay(cleanButton)
-                    if invalidSearch {
+                    if invalidSearch || !connectivity {
                         HStack {
                             Spacer()
-                            Text("Sorry, we couldn't find it")
+                            Text(message)
                                 .modifier(CustomFontModifier(size: .caption))
                                 .multilineTextAlignment(.trailing)
                                 .foregroundColor(.white)
@@ -50,10 +52,17 @@ struct SearchTextfieldView: View {
         .padding(.trailing, 10)
         .transition(.move(edge: .trailing))
     }
+    
+    private var message: String {
+        return !connectivity ? "Sorry you don't have internet" : "Sorry, we couldn't find it"
+    }
 }
 
 struct SearchTextfieldView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchTextfieldView(textfieldSearch: .constant(""), invalidSearch: .constant(true))
+        SearchTextfieldView(
+            textfieldSearch: .constant(""),
+            invalidSearch: .constant(true),
+            connectivity: .constant(true))
     }
 }
