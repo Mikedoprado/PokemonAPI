@@ -7,14 +7,31 @@
 
 import SwiftUI
 
+let baseURL = URL(string: "https://pokeapi.co/api")!
+
 @main
 struct PokemonAPIApp: App {
-    let persistenceController = PersistenceController.shared
-
+    @ObservedObject var pokemonListViewModel = FactoryPokemonListViewModel.makeViewModel()
+    @ObservedObject var deviceOrientationViewModel = DeviceOrientationViewModel()
+    @State var isLaunching = true
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            if isLaunching {
+                LaunchScreenView()
+                    .onAppear { launching() }
+            } else {
+                ComposerPokemonList(
+                    pokemonListViewModel: pokemonListViewModel,
+                    deviceOrientationViewModel: deviceOrientationViewModel)
+                .compose()
+            }
+        }
+    }
+    
+    private func launching() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            isLaunching = false
         }
     }
 }
