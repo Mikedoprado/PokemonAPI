@@ -18,6 +18,8 @@ struct PokemonImage: View {
                 .foregroundColor(PokeColor.white.color)
             WebImage(url: URL(string: pokemonImage))
                 .resizable()
+                .placeholder(Image("notFound"))
+                .indicator(.activity)
                 .aspectRatio(contentMode: .fit)
         }
     }

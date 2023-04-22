@@ -65,6 +65,7 @@
 		18D7941A29EAE902007E3785 /* PokemonAPIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D7941929EAE902007E3785 /* PokemonAPIApp.swift */; };
 		18D7941E29EAE903007E3785 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18D7941D29EAE903007E3785 /* Assets.xcassets */; };
 		18D7942129EAE903007E3785 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18D7942029EAE903007E3785 /* Preview Assets.xcassets */; };
+		18E40CA329F486A5000ECDEF /* PokemonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E40CA229F486A5000ECDEF /* PokemonViewModel.swift */; };
 		18F44AE829F1A15900BDBFF0 /* DeviceOrientationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F44AE729F1A15900BDBFF0 /* DeviceOrientationViewModel.swift */; };
 /* End PBXBuildFile section */
 
@@ -139,6 +140,7 @@
 		18D7941D29EAE903007E3785 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		18D7942029EAE903007E3785 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		18D7942B29EAE903007E3785 /* PokemonAPITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PokemonAPITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		18E40CA229F486A5000ECDEF /* PokemonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonViewModel.swift; sourceTree = "<group>"; };
 		18F44AE729F1A15900BDBFF0 /* DeviceOrientationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceOrientationViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -167,6 +169,7 @@
 				18D657F829F08FD600601EAF /* PokemonListViewModel.swift */,
 				18D657FA29F08FEF00601EAF /* FactoryPokemonListViewModel.swift */,
 				18F44AE729F1A15900BDBFF0 /* DeviceOrientationViewModel.swift */,
+				18E40CA229F486A5000ECDEF /* PokemonViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -500,6 +503,7 @@
 				187330F029F1FE700092E85C /* LocalDBPokemon.swift in Sources */,
 				18A460AA29F2C39F00555136 /* LoadingView.swift in Sources */,
 				18CA4C9F29EDA648008EC544 /* PokemonImage.swift in Sources */,
+				18E40CA329F486A5000ECDEF /* PokemonViewModel.swift in Sources */,
 				188FCC0829EEF97D0080329D /* URLSessionHTTPClient.swift in Sources */,
 				187330F229F2035A0092E85C /* LocalPokemon.swift in Sources */,
 				18CA4CAB29EDA749008EC544 /* MovesView.swift in Sources */,
