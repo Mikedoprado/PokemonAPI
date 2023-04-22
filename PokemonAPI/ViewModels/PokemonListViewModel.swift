@@ -43,11 +43,7 @@ final class PokemonListViewModel: ObservableObject {
                 if self.textSearching.isEmpty {
                     self.fetchList = list
                 }
-                DispatchQueue.main.async {
-                    self.pokeList = list
-                    self.isLoading = false
-                    self.invalidSearch = false
-                }
+                self.setValues(list: list)
             }
         })
     }
@@ -57,8 +53,7 @@ final class PokemonListViewModel: ObservableObject {
             .filter { $0.isEmpty }
             .sink { [weak self] _ in
                 guard let self = self else { return }
-                self.pokeList = self.fetchList
-                self.invalidSearch = false
+                self.setValues(list: self.fetchList)
             }
             .store(in: &cancellables)
     }
@@ -86,12 +81,16 @@ final class PokemonListViewModel: ObservableObject {
     private func searchPokemon(urlString: String) {
         service.getPokemonList(pokemonURLs: [urlString]) { [weak self] result in
             self?.mapResult(result: result) { pokemons in
-                DispatchQueue.main.async {
-                    self?.pokeList = pokemons
-                    self?.isLoading = false
-                    self?.invalidSearch = false
-                }
+                self?.setValues(list: pokemons)
             }
+        }
+    }
+    
+    private func setValues(list: [Pokemon]) {
+        DispatchQueue.main.async {
+            self.pokeList = list
+            self.isLoading = false
+            self.invalidSearch = false
         }
     }
     
@@ -120,15 +119,13 @@ final class PokemonListViewModel: ObservableObject {
     }
     
     private func parsingError(error: Error) {
-        if error as? Loader<Pokemon>.Error == Loader<Pokemon>.Error.invalidData {
-            self.invalidSearch = true
-        } else if error as? Loader<Pokemon>.Error == Loader<Pokemon>.Error.connectivity {
-            self.getPokemonsFromLocal()
-        } else if error as? Loader<[PokeItem]>.Error == Loader<[PokeItem]>.Error.invalidData {
+        typealias LoaderPokemonError = Loader<Pokemon>.Error
+        typealias LoaderPokeItemError = Loader<[PokeItem]>.Error
+        if error as? LoaderPokemonError == .invalidData || error as? LoaderPokeItemError == .invalidData {
             DispatchQueue.main.async { [weak self] in
                 self?.invalidSearch = true
             }
-        } else if error as? Loader<[PokeItem]>.Error == Loader<[PokeItem]>.Error.connectivity {
+        } else if error as? LoaderPokemonError == .connectivity || error as? LoaderPokeItemError == .connectivity {
             self.getPokemonsFromLocal()
         }
     }
