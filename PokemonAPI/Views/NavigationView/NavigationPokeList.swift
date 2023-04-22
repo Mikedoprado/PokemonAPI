@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NavigationPokeList: View {
-    var list: [Pokemon]
+    var list: [PokemonViewModel]
     @State var isSearching: Bool = false
     @Binding var textfieldSearch: String
     @Binding var isLoading: Bool

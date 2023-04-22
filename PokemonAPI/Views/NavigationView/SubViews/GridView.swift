@@ -10,7 +10,7 @@ import SwiftUI
 struct GridView: View {
 
     @Binding var isLandscape: Bool
-    var list: [Pokemon]
+    var list: [PokemonViewModel]
     
     var body: some View {
         LazyVGrid(columns: setColumns()) {

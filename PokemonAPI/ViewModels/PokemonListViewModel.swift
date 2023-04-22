@@ -10,7 +10,7 @@ import Combine
 
 final class PokemonListViewModel: ObservableObject {
     
-    @Published var pokeList: [Pokemon] = []
+    @Published var pokeList: [PokemonViewModel] = []
     @Published var textSearching: String = ""
     @Published var isLoading: Bool = false
     @Published var invalidSearch: Bool = false
@@ -18,7 +18,7 @@ final class PokemonListViewModel: ObservableObject {
     @Published var filterBy: TabBarItem = .name
     
     private var cancellables = Set<AnyCancellable>()
-    private var fetchList: [Pokemon] = []
+    private var fetchList: [PokemonViewModel] = []
     private var service: FetchingPokemonProtocol
     
     private var searchCriteria: TabBarItem { filterBy }
@@ -39,7 +39,9 @@ final class PokemonListViewModel: ObservableObject {
         service.getPokeItemList(url: url, completion: { [weak self] result in
             guard let self = self else { return }
             self.mapResult(result: result) { pokemons in
-                let list = pokemons.sorted { $0.id < $1.id }
+                let list = pokemons
+                    .map { PokemonViewModel($0) }
+                    .sorted { $0.id < $1.id }
                 if self.textSearching.isEmpty {
                     self.fetchList = list
                 }
@@ -84,12 +86,12 @@ final class PokemonListViewModel: ObservableObject {
     private func searchPokemon(urlString: String) {
         service.getPokemonList(pokemonURLs: [urlString]) { [weak self] result in
             self?.mapResult(result: result) { pokemons in
-                self?.setValues(list: pokemons)
+                self?.setValues(list: pokemons.map { PokemonViewModel($0) })
             }
         }
     }
     
-    private func setValues(list: [Pokemon]) {
+    private func setValues(list: [PokemonViewModel]) {
         DispatchQueue.main.async {
             self.pokeList = list
             self.isLoading = false
@@ -101,7 +103,9 @@ final class PokemonListViewModel: ObservableObject {
         service.getPokemonsFromLocal { [weak self] result in
             guard let self = self else { return }
             self.mapResult(result: result) { pokemons in
-                let list = pokemons.sorted { $0.id < $1.id }
+                let list = pokemons
+                    .map { PokemonViewModel($0) }
+                    .sorted { $0.id < $1.id }
                 self.fetchList = list
                 DispatchQueue.main.async {
                     self.pokeList = list
@@ -127,6 +131,7 @@ final class PokemonListViewModel: ObservableObject {
         if error as? LoaderPokemonError == .invalidData || error as? LoaderPokeItemError == .invalidData {
             DispatchQueue.main.async { [weak self] in
                 self?.invalidSearch = true
+                self?.isLoading = false
             }
         } else if error as? LoaderPokemonError == .connectivity || error as? LoaderPokeItemError == .connectivity {
             self.getPokemonsFromLocal()
