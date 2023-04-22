@@ -21,10 +21,10 @@ final class PokemonMapper {
             return Pokemon(
                 id: id ?? 0,
                 name: name,
-                types: types?.map { $0.type.name },
-                abilities: abilities?.map { $0.ability.name },
+                types: types?.map { $0.type.name ?? "" },
+                abilities: abilities?.map { $0.ability.name ?? "" },
                 sprites: sprites?.frontDefault,
-                moves: moves?.map { $0.move.name },
+                moves: moves?.map { $0.move.name ?? "" },
                 artwork: sprites?.other.officialArtWork.frontDefault)
         }
     }
@@ -34,7 +34,7 @@ final class PokemonMapper {
     }
 
     struct AbilityInfo: Codable {
-        let name: String
+        let name: String?
     }
 
     struct Move: Codable {
@@ -42,11 +42,11 @@ final class PokemonMapper {
     }
 
     struct MoveInfo: Codable {
-        let name: String
+        let name: String?
     }
 
     struct Sprites: Codable {
-        let frontDefault: String
+        let frontDefault: String?
         let other: Other
 
         enum CodingKeys: String, CodingKey {
@@ -64,7 +64,7 @@ final class PokemonMapper {
     }
     
     struct OfficialArtWork: Codable {
-        let frontDefault: String
+        let frontDefault: String?
 
         enum CodingKeys: String, CodingKey {
             case frontDefault = "front_default"
@@ -76,7 +76,7 @@ final class PokemonMapper {
     }
 
     struct TypeInfo: Codable {
-        let name: String
+        let name: String?
     }
 
     private static var OK_200: Int { 200 }
