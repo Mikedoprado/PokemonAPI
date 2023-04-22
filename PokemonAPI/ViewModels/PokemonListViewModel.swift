@@ -67,6 +67,9 @@ final class PokemonListViewModel: ObservableObject {
                 case .name:
                     let urlString = Endpoint.getPokemonByName(searchText.lowercased()).url(baseURL: baseURL).absoluteString
                     self?.searchPokemon(urlString: urlString)
+                case .type:
+                    let url = Endpoint.getPokemonByType(searchText.lowercased()).url(baseURL: baseURL)
+                    self?.fetchPokemons(url: url)
                 case .ability:
                     let url = Endpoint.getPokemonByAbility(searchText.lowercased()).url(baseURL: baseURL)
                     self?.fetchPokemons(url: url)

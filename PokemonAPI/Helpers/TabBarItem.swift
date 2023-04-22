@@ -9,12 +9,14 @@ import Foundation
 import Combine
 
 enum TabBarItem: Hashable {
-    case name, ability
+    case name, type, ability
     
     var title : String {
         switch self {
         case .name:
             return "name"
+        case .type:
+            return "type"
         case .ability:
             return "ability"
         }
