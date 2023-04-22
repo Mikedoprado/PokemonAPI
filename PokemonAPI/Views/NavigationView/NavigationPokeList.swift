@@ -43,9 +43,9 @@ struct NavigationPokeList: View {
                     .toolbarColorScheme(.dark, for: .navigationBar)
                     .toolbarBackground(.pink, for: .navigationBar)
                     .toolbarBackground(.visible, for: .navigationBar)
-//                    if isLoading {
-//                        LoadingView(isLoading: $isLoading)
-//                    }
+                    if isLoading {
+                        LoadingView(isLoading: $isLoading)
+                    }
                 }
             }
         }
