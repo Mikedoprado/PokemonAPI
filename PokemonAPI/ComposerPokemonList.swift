@@ -8,18 +8,18 @@
 import SwiftUI
 
 struct ComposerPokemonList {
-    @ObservedObject var pokemonListViewModel: PokemonListViewModel
     @ObservedObject var deviceOrientationViewModel: DeviceOrientationViewModel
+    @ObservedObject var pokelistViewModel: ListPokemonViewModel
     
     func compose() -> NavigationPokeList {
         NavigationPokeList(
-            list: pokemonListViewModel.pokeList,
-            textfieldSearch: $pokemonListViewModel.textSearching,
-            isLoading: $pokemonListViewModel.isLoading,
-            invalidSearch: $pokemonListViewModel.invalidSearch,
-            connectivity: $pokemonListViewModel.connectivity,
+            list: pokelistViewModel.pokeList,
+            textfieldSearch: $pokelistViewModel.textSearching,
+            isLoading: $pokelistViewModel.isLoading,
+            invalidSearch: $pokelistViewModel.invalidSearch,
+            connectivity: $pokelistViewModel.connectivity,
             isLandscape: $deviceOrientationViewModel.isLandscape,
-            filterBy: $pokemonListViewModel.filterBy
+            filterBy: $pokelistViewModel.filterBy
         )
     }
 }
