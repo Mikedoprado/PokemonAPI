@@ -45,10 +45,10 @@
 		18A460AD29F2CFB100555136 /* FactoryPokemonService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A460AC29F2CFB100555136 /* FactoryPokemonService.swift */; };
 		18A460AF29F2E37000555136 /* ComposerPokemonList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A460AE29F2E37000555136 /* ComposerPokemonList.swift */; };
 		18A460B129F2E77500555136 /* SearchingFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A460B029F2E77500555136 /* SearchingFilterView.swift */; };
-		18A460B429F2F1B600555136 /* CustomTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A460B329F2F1B600555136 /* CustomTabBarView.swift */; };
-		18A460B629F2F1DE00555136 /* CustomTabBarContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A460B529F2F1DE00555136 /* CustomTabBarContainerView.swift */; };
-		18A460B829F2F20700555136 /* TabBarItemsPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A460B729F2F20700555136 /* TabBarItemsPreferenceKey.swift */; };
-		18A460BA29F2F23200555136 /* TabBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A460B929F2F23200555136 /* TabBarItem.swift */; };
+		18A460B429F2F1B600555136 /* CustomFilterBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A460B329F2F1B600555136 /* CustomFilterBarView.swift */; };
+		18A460B629F2F1DE00555136 /* CustomFilterBarContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A460B529F2F1DE00555136 /* CustomFilterBarContainerView.swift */; };
+		18A460B829F2F20700555136 /* FilterBarItemsPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A460B729F2F20700555136 /* FilterBarItemsPreferenceKey.swift */; };
+		18A460BA29F2F23200555136 /* FilterTabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A460B929F2F23200555136 /* FilterTabItem.swift */; };
 		18CA4C9729ED8975008EC544 /* ContainerInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CA4C9629ED8975008EC544 /* ContainerInfoView.swift */; };
 		18CA4C9929ED93F5008EC544 /* pixelmix.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18CA4C9829ED93F5008EC544 /* pixelmix.ttf */; };
 		18CA4C9D29EDA62D008EC544 /* ButtonViewBack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CA4C9C29EDA62D008EC544 /* ButtonViewBack.swift */; };
@@ -120,10 +120,10 @@
 		18A460AC29F2CFB100555136 /* FactoryPokemonService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FactoryPokemonService.swift; sourceTree = "<group>"; };
 		18A460AE29F2E37000555136 /* ComposerPokemonList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposerPokemonList.swift; sourceTree = "<group>"; };
 		18A460B029F2E77500555136 /* SearchingFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchingFilterView.swift; sourceTree = "<group>"; };
-		18A460B329F2F1B600555136 /* CustomTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarView.swift; sourceTree = "<group>"; };
-		18A460B529F2F1DE00555136 /* CustomTabBarContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarContainerView.swift; sourceTree = "<group>"; };
-		18A460B729F2F20700555136 /* TabBarItemsPreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarItemsPreferenceKey.swift; sourceTree = "<group>"; };
-		18A460B929F2F23200555136 /* TabBarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarItem.swift; sourceTree = "<group>"; };
+		18A460B329F2F1B600555136 /* CustomFilterBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFilterBarView.swift; sourceTree = "<group>"; };
+		18A460B529F2F1DE00555136 /* CustomFilterBarContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFilterBarContainerView.swift; sourceTree = "<group>"; };
+		18A460B729F2F20700555136 /* FilterBarItemsPreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterBarItemsPreferenceKey.swift; sourceTree = "<group>"; };
+		18A460B929F2F23200555136 /* FilterTabItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterTabItem.swift; sourceTree = "<group>"; };
 		18CA4C9629ED8975008EC544 /* ContainerInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerInfoView.swift; sourceTree = "<group>"; };
 		18CA4C9829ED93F5008EC544 /* pixelmix.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = pixelmix.ttf; sourceTree = "<group>"; };
 		18CA4C9A29ED9531008EC544 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -279,8 +279,8 @@
 			children = (
 				18D657FC29F0AAB500601EAF /* SearchTextfieldView.swift */,
 				18A460B029F2E77500555136 /* SearchingFilterView.swift */,
-				18A460B529F2F1DE00555136 /* CustomTabBarContainerView.swift */,
-				18A460B329F2F1B600555136 /* CustomTabBarView.swift */,
+				18A460B529F2F1DE00555136 /* CustomFilterBarContainerView.swift */,
+				18A460B329F2F1B600555136 /* CustomFilterBarView.swift */,
 			);
 			path = SearchingView;
 			sourceTree = "<group>";
@@ -299,8 +299,8 @@
 			children = (
 				18CA4CAD29EDA7B5008EC544 /* CustomFontModifier.swift */,
 				189221CB29EDE11F005B6858 /* PokeTypeColors.swift */,
-				18A460B729F2F20700555136 /* TabBarItemsPreferenceKey.swift */,
-				18A460B929F2F23200555136 /* TabBarItem.swift */,
+				18A460B729F2F20700555136 /* FilterBarItemsPreferenceKey.swift */,
+				18A460B929F2F23200555136 /* FilterTabItem.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -529,13 +529,13 @@
 				188C7E4029EB4CE200FE615A /* PokemonMapper.swift in Sources */,
 				188FCC0229EEF0E70080329D /* PokeItemMapper.swift in Sources */,
 				188FCBF829EEE75D0080329D /* ScrollViewNavigationAppearance.swift in Sources */,
-				18A460B829F2F20700555136 /* TabBarItemsPreferenceKey.swift in Sources */,
+				18A460B829F2F20700555136 /* FilterBarItemsPreferenceKey.swift in Sources */,
 				1850C13C29EC4AB400830D76 /* NavigationPokeList.swift in Sources */,
 				186941A629F600EB00307FDC /* UseCaseLocalDB.swift in Sources */,
 				18CA4C9D29EDA62D008EC544 /* ButtonViewBack.swift in Sources */,
 				188FCC0029EEF0C10080329D /* PokeItemsLoader.swift in Sources */,
-				18A460BA29F2F23200555136 /* TabBarItem.swift in Sources */,
-				18A460B429F2F1B600555136 /* CustomTabBarView.swift in Sources */,
+				18A460BA29F2F23200555136 /* FilterTabItem.swift in Sources */,
+				18A460B429F2F1B600555136 /* CustomFilterBarView.swift in Sources */,
 				18236F3829EAF47800E02799 /* HTTPClient.swift in Sources */,
 				186941A429F600A400307FDC /* ListPokemonViewModelFactory.swift in Sources */,
 				188BAA0C29F1DA0800F8B0ED /* FetchingPokemonProtocol.swift in Sources */,
@@ -544,7 +544,7 @@
 				1807004B29EF428F00C63F82 /* PokemonService.swift in Sources */,
 				1869228D29F5D15A000F09EB /* UseCaseSearchPokemon.swift in Sources */,
 				18D5D66829F2C02C002065F3 /* LaunchScreenView.swift in Sources */,
-				18A460B629F2F1DE00555136 /* CustomTabBarContainerView.swift in Sources */,
+				18A460B629F2F1DE00555136 /* CustomFilterBarContainerView.swift in Sources */,
 				18D7941A29EAE902007E3785 /* PokemonAPIApp.swift in Sources */,
 				18D657FD29F0AAB500601EAF /* SearchTextfieldView.swift in Sources */,
 				18CA4C9729ED8975008EC544 /* ContainerInfoView.swift in Sources */,

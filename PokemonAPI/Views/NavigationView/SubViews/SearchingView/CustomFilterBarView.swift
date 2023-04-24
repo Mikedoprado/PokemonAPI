@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct CustomTabBarView: View {
+struct CustomFilterBarView: View {
     
-    let tabs: [TabBarItem]
-    @Binding var selection : TabBarItem
+    let tabs: [FilterTabItem]
+    @Binding var selection : FilterTabItem
     @Namespace private var namespace
     
     var body: some View {
@@ -29,8 +29,8 @@ struct CustomTabBarView: View {
     }
 }
 
-extension CustomTabBarView {
-    private func tabView(tab: TabBarItem) -> some View {
+extension CustomFilterBarView {
+    private func tabView(tab: FilterTabItem) -> some View {
         ZStack {
             if selection == tab {
                 RoundedRectangle(cornerRadius: 15)
@@ -49,7 +49,7 @@ extension CustomTabBarView {
 
     }
     
-    private func switchToTab(tab: TabBarItem) {
+    private func switchToTab(tab: FilterTabItem) {
         selection = tab
     }
     

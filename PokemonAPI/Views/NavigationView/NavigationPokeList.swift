@@ -15,7 +15,7 @@ struct NavigationPokeList: View {
     @Binding var invalidSearch: Bool
     @Binding var connectivity: Bool
     @Binding var isLandscape: Bool
-    @Binding var filterBy: TabBarItem
+    @Binding var filterBy: FilterTabItem
     
     var body: some View {
         NavigationView {

@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-struct CustomTabBarContainerView<Content:View>: View {
+struct CustomFilterBarContainerView<Content:View>: View {
     
-    @Binding var selection: TabBarItem
-    @State private var tabs: [TabBarItem] = []
+    @Binding var selection: FilterTabItem
+    @State private var tabs: [FilterTabItem] = []
     let content : Content
     
-    init(selection: Binding<TabBarItem>, @ViewBuilder content: () -> Content) {
+    init(selection: Binding<FilterTabItem>, @ViewBuilder content: () -> Content) {
         self._selection = selection
         self.content = content()
     }
@@ -22,9 +22,9 @@ struct CustomTabBarContainerView<Content:View>: View {
             content
                 .ignoresSafeArea()
             
-            CustomTabBarView(tabs: tabs, selection: $selection)
+            CustomFilterBarView(tabs: tabs, selection: $selection)
         }
-        .onPreferenceChange(TabBarItemsPreferenceKey.self) { value in
+        .onPreferenceChange(FilterBarItemsPreferenceKey.self) { value in
             self.tabs = value
         }
     }
