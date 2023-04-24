@@ -22,7 +22,7 @@ final class UseCaseSearchPokemon {
     
     func searchingByFilter(
         searchText: String,
-        filterBy: TabBarItem,
+        filterBy: FilterTabItem,
         completion: @escaping (Result) -> Void
     ) {
         switch filterBy {

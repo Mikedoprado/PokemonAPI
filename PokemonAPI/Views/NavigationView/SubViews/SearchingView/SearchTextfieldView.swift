@@ -11,7 +11,7 @@ struct SearchTextfieldView: View {
     @Binding var textfieldSearch: String
     @Binding var invalidSearch: Bool
     @Binding var connectivity: Bool
-    @Binding var filterBy: TabBarItem
+    @Binding var filterBy: FilterTabItem
     
     var body: some View {
         HStack {

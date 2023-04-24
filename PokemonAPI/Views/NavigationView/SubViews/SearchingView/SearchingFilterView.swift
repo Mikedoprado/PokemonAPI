@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct SearchingFilterView: View {
-    var tabBarItems: [TabBarItem] = [.name, .type, .ability]
-    @Binding var selection: TabBarItem
+    var tabBarItems: [FilterTabItem] = [.name, .type, .ability]
+    @Binding var selection: FilterTabItem
     var body: some View {
         HStack {
-            CustomTabBarView(tabs: tabBarItems, selection: $selection)
+            CustomFilterBarView(tabs: tabBarItems, selection: $selection)
         }
     }
 }

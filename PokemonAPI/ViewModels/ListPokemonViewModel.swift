@@ -11,7 +11,7 @@ import Combine
 final class ListPokemonViewModel: ObservableObject {
     @Published var pokeList: [PokemonViewModel] = []
     @Published var isLoading: Bool = false
-    @Published var filterBy: TabBarItem = .name
+    @Published var filterBy: FilterTabItem = .name
     @Published var textSearching: String = ""
     @Published var invalidSearch: Bool = false
     @Published var connectivity: Bool = true
@@ -40,6 +40,7 @@ final class ListPokemonViewModel: ObservableObject {
     }
     
     private func fetchPokemons() {
+        isLoading = true
         useCaseSearch.getPokemons(url: urlPokelist) { [weak self] result in
             guard let self = self else { return }
             self.mapResult(result: result, action: { pokemons in
