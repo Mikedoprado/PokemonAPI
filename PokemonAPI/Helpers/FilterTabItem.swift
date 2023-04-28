@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-enum FilterTabItem: Hashable {
+enum FilterTabItem: Hashable, Equatable {
     case name, type, ability
     
     var title : String {
