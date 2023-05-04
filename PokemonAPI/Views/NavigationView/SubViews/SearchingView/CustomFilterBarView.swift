@@ -24,7 +24,6 @@ struct CustomFilterBarView: View {
             .animation(.spring(), value: selection)
         }
         .padding(10)
-        
     }
 }
 
