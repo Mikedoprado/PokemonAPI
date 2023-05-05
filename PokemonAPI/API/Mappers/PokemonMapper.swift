@@ -81,11 +81,15 @@ final class PokemonMapper {
 
     private static var OK_200: Int { 200 }
     
+    private enum Error: Swift.Error {
+        case invalidData
+    }
+    
     static func map(_ data: Data,_ response: HTTPURLResponse) throws -> Pokemon {
         guard
             response.statusCode == OK_200,
             let item = try? JSONDecoder().decode(Item.self, from: data)
-        else { throw Loader<Pokemon>.Error.invalidData }
+        else { throw Error.invalidData }
         return item.pokemon
     }
 }
