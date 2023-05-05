@@ -18,12 +18,8 @@ final class ListPokemonViewModel: ObservableObject {
     
     private var cancellables = Set<AnyCancellable>()
     private var fetchList: [PokemonViewModel] = []
-    
     private let service: Service
-    
-    private var urlPokelist: URL {
-        Endpoint.getPokeList.url(baseURL: baseURL)
-    }
+    private var urlPokelist: URL { Endpoint.getPokeList.url(baseURL: baseURL) }
     
     init(service: Service) {
         self.service = service
@@ -109,6 +105,7 @@ final class ListPokemonViewModel: ObservableObject {
 //    }
     
     private func setInitialValues() {
+        self.isLoading = false
         $textSearching
             .filter { $0.isEmpty }
             .sink { [weak self] _ in

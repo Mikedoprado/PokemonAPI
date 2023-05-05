@@ -45,6 +45,7 @@ struct NavigationPokeList: View {
                     }
                 }
             }
+            .background(Color.pink)
         }
     }
     

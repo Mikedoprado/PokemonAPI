@@ -1,5 +1,5 @@
 //
-//  LoaderTests.swift
+//  PokemonMapperTests.swift
 //  PokemonAPITests
 //
 //  Created by Michael Conchado on 15/04/23.
