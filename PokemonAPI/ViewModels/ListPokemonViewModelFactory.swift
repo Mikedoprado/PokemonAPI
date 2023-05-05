@@ -4,15 +4,17 @@
 //
 //  Created by Michael Conchado on 23/04/23.
 //
+import Foundation
 
 final class ListPokemonViewModelFactory {
-    private lazy var service = FactoryPokemonService().makePokemonService()
-    private lazy var useCaseSearch = UseCaseSearchPokemon(service: service)
-    private lazy var useCaseLocalDB = UseCaseLocalDB(service: service)
+    
+    private lazy var httpClient: HTTPClient = {
+        URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
+    }()
+
+    private lazy var service = Service(httpClient: httpClient)
     
     func makeViewModel() -> ListPokemonViewModel {
-        ListPokemonViewModel(
-            useCaseSearch: useCaseSearch,
-            useCaseLocalDB: useCaseLocalDB)
+        ListPokemonViewModel(service: service)
     }
 }

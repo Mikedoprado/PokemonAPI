@@ -19,36 +19,94 @@ final class ListPokemonViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     private var fetchList: [PokemonViewModel] = []
     
-    let useCaseSearch: UseCaseSearchPokemon
-    let useCaseLocalDB: UseCaseLocalDB
+    private let service: Service
     
     private var urlPokelist: URL {
         Endpoint.getPokeList.url(baseURL: baseURL)
     }
     
-    init(
-        useCaseSearch: UseCaseSearchPokemon,
-        useCaseLocalDB: UseCaseLocalDB
-    ) {
-        self.useCaseSearch = useCaseSearch
-        self.useCaseLocalDB = useCaseLocalDB
-        fetchPokemons()
-        searching()
-        getPokemonFromLocal()
+    init(service: Service) {
+        self.service = service
+        getPokemonsList(url: urlPokelist)
+        searchByFilter()
         setInitialValues()
-        
     }
     
-    private func fetchPokemons() {
+    private func getPokemonsList(url: URL) {
         isLoading = true
-        useCaseSearch.getPokemons(url: urlPokelist) { [weak self] result in
-            guard let self = self else { return }
-            self.mapResult(result: result, action: { pokemons in
-                self.fetchList = pokemons
-                self.setValues(list: pokemons)
-            })
-        }
+        service
+            .getPokemonList(url: url)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] completion in
+                if case .failure = completion {
+                    self?.invalidSearch = true
+                    // MARK: TO-DO
+                    // Show error when don't have any pokemon in localDB and it was a failure on the request
+                    print("failure request")
+                }
+            } receiveValue: { [weak self] pokemons in
+                guard let self = self else { return }
+                let sortedPokemons = pokemons.sorted(by: { $0.id < $1.id }).map { PokemonViewModel($0) }
+                if self.fetchList.isEmpty {
+                    self.fetchList = sortedPokemons
+                }
+                self.setValues(list: sortedPokemons)
+            }
+            .store(in: &cancellables)
     }
+    
+    private func getPokemon(url: URL) {
+        service
+            .getPokemons(url: url)
+            .handleEvents(receiveCompletion: { [weak self] completion in
+                if case .failure = completion {
+                    guard let self = self else { return }
+//                    return self.getLocalPokemons()
+                }
+            })
+            .receive(on: RunLoop.main)
+            .sink { [weak self] completion in
+                if case .failure = completion {
+                    self?.invalidSearch = true
+                    print("failure request")
+                }
+            } receiveValue: { [weak self] pokemon in
+                self?.setValues(list: [PokemonViewModel(pokemon)])
+            }.store(in: &cancellables)
+    }
+    
+    private func searchByFilter() {
+        self.isLoading = true
+        $textSearching
+            .filter { !$0.isEmpty }
+            .debounce(for: .seconds(1.5), scheduler: DispatchQueue.main)
+            .sink { [weak self] searchText in
+                guard let self = self else { return }
+                let url = self.filterBy.getURLByFilter(searchText: searchText)
+                if self.filterBy == .name {
+                    self.getPokemon(url: url)
+                } else {
+                    self.getPokemonsList(url: url)
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+//    private func getLocalPokemons() {
+//        useCaseLocalDB.getPokemonsFromLocal { [weak self] result in
+//            guard let self = self else { return }
+//            switch result {
+//            case let .success(pokemons):
+//                let sortedPokemons = pokemons.sorted(by: { $0.id < $1.id }).map { PokemonViewModel($0) }
+//                if self.fetchList.isEmpty {
+//                    self.fetchList = sortedPokemons
+//                }
+//                self.setValues(list: sortedPokemons)
+//            case let .failure(error):
+//                print(error.localizedDescription)
+//            }
+//        }
+//    }
     
     private func setInitialValues() {
         $textSearching
@@ -60,66 +118,11 @@ final class ListPokemonViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    private func searching() {
-        self.isLoading = true
-        $textSearching
-            .filter { !$0.isEmpty }
-            .debounce(for: .seconds(1.5), scheduler: DispatchQueue.main)
-            .sink { [weak self] searchText in
-                guard let self = self else { return }
-                self.useCaseSearch.searchingByFilter(
-                    searchText: searchText,
-                    filterBy: self.filterBy,
-                    completion: { result in
-                        self.mapResult(result: result, action: { pokemons in
-                            self.setValues(list: pokemons)
-                        })
-                    })
-            }.store(in: &cancellables)
-    }
     
     private func setValues(list: [PokemonViewModel]) {
-        DispatchQueue.main.async {
-            self.pokeList = list
-            self.isLoading = false
-            self.invalidSearch = false
-        }
+        self.pokeList = list
+        self.isLoading = false
+        self.invalidSearch = false
     }
-    
-    private func getPokemonFromLocal() {
-        $connectivity
-            .filter { !$0 }
-            .sink { [weak self] _ in
-                self?.useCaseLocalDB.getPokemonsFromLocal { [weak self] result in
-                    self?.mapResult(result: result, action: { pokemons in
-                        self?.fetchList = pokemons
-                        self?.setValues(list: pokemons)
-                    })
-                }
-            }.store(in: &cancellables)
-    }
-    
-    private func mapResult(result: Result<[Pokemon], Error>, action: ([PokemonViewModel]) -> Void) {
-        switch result {
-        case let .success(pokemons):
-            action(pokemons.map { PokemonViewModel($0) }.sorted { $0.id < $1.id })
-        case let .failure(error):
-            parsingError(error: error)
-        }
-    }
-    
-    private func parsingError(error: Error) {
-        typealias LoaderPokemonError = Loader<Pokemon>.Error
-        typealias LoaderPokeItemError = Loader<[PokeItem]>.Error
-        if error as? LoaderPokemonError == .invalidData || error as? LoaderPokeItemError == .invalidData {
-            DispatchQueue.main.async { [weak self] in
-                self?.invalidSearch = true
-                self?.isLoading = false
-            }
-        } else if error as? LoaderPokemonError == .connectivity || error as? LoaderPokeItemError == .connectivity {
-            self.getPokemonFromLocal()
-            self.connectivity = false
-        }
-    }
-    
+
 }
