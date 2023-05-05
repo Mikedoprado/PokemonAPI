@@ -32,10 +32,7 @@ struct NavigationPokeList: View {
                         GridView(isLandscape: $isLandscape, list: list)
                     }
                     .toolbar(content: {
-                        Button(action: {isSearching.toggle()}) {
-                            Image(systemName: "magnifyingglass")
-                                .foregroundColor(.white)
-                        }
+                        searchButton
                     })
                     .background(PokeColor.dark.color)
                     .navigationTitle("Pokedex")
@@ -48,6 +45,17 @@ struct NavigationPokeList: View {
                     }
                 }
             }
+        }
+    }
+    
+    private var searchButton: some View {
+        Button(action: {
+            withAnimation {
+                isSearching.toggle()
+            }
+        }) {
+            Image(systemName: "magnifyingglass")
+                .foregroundColor(.white)
         }
     }
 }
