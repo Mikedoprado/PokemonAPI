@@ -9,45 +9,39 @@ import XCTest
 import Foundation
 @testable import PokemonAPI
 
-final class PokemonLoaderTests: XCTestCase {
+final class PokemonMapperTests: XCTestCase {
 
-    func test_deliverErrorOnNot200HTTPResponse() {
-        let (sut, client) = makeSUT()
-
+    func test_deliverErrorOnNot200HTTPResponse() throws {
         let samples = [199, 201, 300, 400, 500]
         
-        samples.enumerated().forEach { index, code in
-            expect(sut: sut, completeWith: .failure(PokemonLoader.Error.invalidData)) {
-                let invalidData = Data("invalid data".utf8)
-                client.complete(withStatusCode: code, data: invalidData, at: index)
-            }
+        let invalidData = Data("invalidData".utf8)
+        try samples.forEach {  code in
+            XCTAssertThrowsError(
+                try PokemonMapper.map(invalidData, HTTPURLResponse(statusCode: code))
+            )
         }
     }
     
-    func test_deliverErrorOnNot2xxHTTPResponse() {
-        let (sut, client) = makeSUT()
+    func test_deliverErrorOnNot2xxHTTPResponse() throws {
 
         let samples = [200, 201, 250, 280, 299]
-        
-        samples.enumerated().forEach { index, code in
-            expect(sut: sut, completeWith: .failure(PokemonLoader.Error.invalidData)) {
-                let invalidJSON = Data("invalid json".utf8)
-                client.complete(withStatusCode: code, data: invalidJSON, at: index)
-            }
+        let invalidData = Data("invalidData".utf8)
+        try samples.forEach {  code in
+            XCTAssertThrowsError(
+                try PokemonMapper.map(invalidData, HTTPURLResponse(statusCode: code))
+            )
         }
     }
     
     func test_deliverErrorOn200HTTPResponseWithInvalidData() {
-        let (sut, client) = makeSUT()
+        let invalidData = Data("invalidData".utf8)
         
-        expect(sut: sut, completeWith: .failure(PokemonLoader.Error.invalidData)) {
-            let invalidData = Data("invalidData".utf8)
-            client.complete(withStatusCode: 200, data: invalidData)
-        }
+        XCTAssertThrowsError(
+            try PokemonMapper.map(invalidData, HTTPURLResponse(statusCode: 200))
+        )
     }
     
-    func test_load_deliversItemsOn200HTTPResponseWithJSONItems() {
-        let (sut, client) = makeSUT()
+    func test_load_deliversItemsOn200HTTPResponseWithJSONItems() throws {
 
         let pokemon1 = makePokemon(
             id: 25,
@@ -56,53 +50,20 @@ final class PokemonLoaderTests: XCTestCase {
             abilities: [Ability(ability: AbilityInfo(name: "Static"))],
             sprites: Sprites(
                 frontDefault: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png",
-                other: PokemonLoaderTests.Other(
+                other: PokemonMapperTests.Other(
                     officialArtWork: OfficialArtWork(
                         frontDefault: "somo artwork"))),
             moves: [Move(move: MoveInfo(name: "Thunderbolt"))])
         
-        expect(sut: sut, completeWith: .success(pokemon1.model.item)) {
-            let json = makeItemsJSONFromItems(pokemon1.model)
-            client.complete(withStatusCode: 200, data: json)
-        }
+        let json = makeItemsJSONFromItems(pokemon1.model)
+        
+        let result = try PokemonMapper.map(json, HTTPURLResponse(statusCode: 200))
+        
+        XCTAssertEqual(result, pokemon1.model.item)
     }
 
     // MARK: Helpers
-    
-    private func makeSUT(
-        file: StaticString = #filePath,
-        line: UInt = #line
-    ) -> (sut: PokemonLoader, client: HTTPClientSpy) {
-        let client = HTTPClientSpy()
-        let sut = PokemonLoader(client: client)
-        trackForMemoryLeak(instance: client, file: file, line: line)
-        trackForMemoryLeak(instance: sut, file: file, line: line)
-        return (sut, client)
-    }
-    
-    private func expect(
-        sut: PokemonLoader,
-        completeWith expectedResult: PokemonLoader.Result,
-        action: () -> Void,
-        url: URL = URL(string: "http://any-url.com")!,
-        file: StaticString = #filePath,
-        line: UInt = #line
-    ) {
-        let exp = expectation(description: "waiting for completion")
-        sut.load(url: url) { receivedResult in
-            switch (receivedResult, expectedResult) {
-            case let (.success(receivedItems), .success(expectedItems)):
-                XCTAssertEqual(receivedItems, expectedItems, file: file, line: line)
-            case let (.failure(receivedError), .failure(expectedError)):
-                XCTAssertEqual(receivedError as! PokemonLoader.Error, expectedError as! PokemonLoader.Error, file: file, line: line)
-            default: XCTFail("Expected result \(expectedResult) got \(receivedResult) instead", file: file, line: line)
-            }
-            exp.fulfill()
-        }
-        action()
-        
-        wait(for: [exp], timeout: 1.0)
-    }
+
     
     private func makePokemon(id: Int, name: String, types: [Types], abilities: [Ability], sprites: Sprites, moves: [Move]) -> (model: Item, json: [String : Any]) {
         
@@ -132,7 +93,7 @@ final class PokemonLoaderTests: XCTestCase {
         return jsonData
     }
 
-    struct Item: Codable {
+    struct Item: Codable, Equatable {
         let id: Int
         let name: String
         let abilities: [Ability]
@@ -150,6 +111,11 @@ final class PokemonLoaderTests: XCTestCase {
                 moves: moves.map { $0.move.name },
                 artwork: sprites.other.officialArtWork.frontDefault)
         }
+        
+        static func == (lhs: PokemonMapperTests.Item, rhs: PokemonMapperTests.Item) -> Bool {
+            return lhs.id == rhs.id
+        }
+        
     }
 
     struct Ability: Codable {
