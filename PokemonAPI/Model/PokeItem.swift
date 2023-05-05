@@ -13,6 +13,7 @@ struct PokeItem: Codable, Equatable {
 }
 
 struct ListPokeItems: Codable {
+    let next: String?
     let results: [PokeItem]?
     let pokemon: [Pokemons]?
 }

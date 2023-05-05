@@ -18,14 +18,12 @@ struct CustomFilterBarView: View {
             ForEach(tabs, id: \.self) { tab in
                 tabView(tab: tab)
                     .onTapGesture {
-                        withAnimation(.easeInOut) {
-                            switchToTab(tab: tab)
-                        }
+                        switchToTab(tab: tab)
                     }
             }
+            .animation(.spring(), value: selection)
         }
         .padding(10)
-        
     }
 }
 

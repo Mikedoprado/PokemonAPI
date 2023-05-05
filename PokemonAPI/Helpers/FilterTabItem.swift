@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-enum FilterTabItem: Hashable {
+enum FilterTabItem: Hashable, Equatable {
     case name, type, ability
     
     var title : String {
@@ -19,6 +19,20 @@ enum FilterTabItem: Hashable {
             return "type"
         case .ability:
             return "ability"
+        }
+    }
+}
+
+extension FilterTabItem {
+    
+    func getURLByFilter(searchText: String) -> URL {
+        switch self {
+        case .name:
+            return Endpoint.getPokemonByName(searchText.lowercased()).url(baseURL: baseURL)
+        case .type:
+            return Endpoint.getPokemonByType(searchText.lowercased()).url(baseURL: baseURL)
+        case .ability:
+            return Endpoint.getPokemonByAbility(searchText.lowercased()).url(baseURL: baseURL)
         }
     }
 }

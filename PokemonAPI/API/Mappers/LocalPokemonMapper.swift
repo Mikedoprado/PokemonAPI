@@ -18,4 +18,15 @@ enum LocalPokemonMapper {
             moves: localPokemon.moves,
             artwork: localPokemon.artwork)
     }
+    
+    static func map(pokemon: Pokemon) -> LocalPokemon {
+        LocalPokemon(
+            id: pokemon.id,
+            name: pokemon.name,
+            types: pokemon.types,
+            abilities: pokemon.abilities,
+            sprites: pokemon.sprites,
+            moves: pokemon.moves,
+            artwork: pokemon.artwork)
+    }
 }
