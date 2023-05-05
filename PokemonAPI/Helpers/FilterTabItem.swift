@@ -22,3 +22,17 @@ enum FilterTabItem: Hashable, Equatable {
         }
     }
 }
+
+extension FilterTabItem {
+    
+    func getURLByFilter(searchText: String) -> URL {
+        switch self {
+        case .name:
+            return Endpoint.getPokemonByName(searchText.lowercased()).url(baseURL: baseURL)
+        case .type:
+            return Endpoint.getPokemonByType(searchText.lowercased()).url(baseURL: baseURL)
+        case .ability:
+            return Endpoint.getPokemonByAbility(searchText.lowercased()).url(baseURL: baseURL)
+        }
+    }
+}
