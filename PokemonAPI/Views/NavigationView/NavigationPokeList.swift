@@ -16,6 +16,7 @@ struct NavigationPokeList: View {
     @Binding var connectivity: Bool
     @Binding var isLandscape: Bool
     @Binding var filterBy: FilterTabItem
+    @Binding var loadMore: Bool
     
     var body: some View {
         NavigationView {
@@ -28,35 +29,18 @@ struct NavigationPokeList: View {
                         filterBy: $filterBy)
                 }
                 ZStack {
-                    ScrollView {
-                        GridView(isLandscape: $isLandscape, list: list)
-                    }
-                    .toolbar(content: {
-                        searchButton
-                    })
-                    .background(PokeColor.dark.color)
-                    .navigationTitle("Pokedex")
-                    .navigationBarTitleDisplayMode(.large)
-                    .toolbarColorScheme(.dark, for: .navigationBar)
-                    .toolbarBackground(.pink, for: .navigationBar)
-                    .toolbarBackground(.visible, for: .navigationBar)
+                    CustomScrollView(
+                        loadMore: $loadMore,
+                        isSearching: $isSearching,
+                        isLandscape: $isLandscape) {
+                            GridView(isLandscape: $isLandscape, list: list)
+                        }
                     if isLoading {
                         LoadingView(isLoading: $isLoading)
                     }
                 }
             }
             .background(Color.pink)
-        }
-    }
-    
-    private var searchButton: some View {
-        Button(action: {
-            withAnimation {
-                isSearching.toggle()
-            }
-        }) {
-            Image(systemName: "magnifyingglass")
-                .foregroundColor(.white)
         }
     }
 }
@@ -66,10 +50,11 @@ struct NavigationPokeList_Previews: PreviewProvider {
         NavigationPokeList(
             list: [],
             textfieldSearch: .constant(""),
-            isLoading: .constant(true),
+            isLoading: .constant(false),
             invalidSearch: .constant(false),
             connectivity: .constant(true),
             isLandscape: .constant(false),
-            filterBy: .constant(.name))
+            filterBy: .constant(.name),
+            loadMore: .constant(false))
     }
 }
