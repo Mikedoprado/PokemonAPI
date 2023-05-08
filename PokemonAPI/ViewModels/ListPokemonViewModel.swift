@@ -31,7 +31,10 @@ final class ListPokemonViewModel: ObservableObject {
         getPokemonsList(url: urlPokelist)
         searchByFilter()
         setInitialValues()
-        
+        loadMore()
+    }
+    
+    private func loadMore() {
         appStates.$loadMore
             .removeDuplicates()
             .sink { [weak self] loadingMore in
@@ -40,7 +43,6 @@ final class ListPokemonViewModel: ObservableObject {
                 }
             }
             .store(in: &cancellables)
-
     }
     
     private func getPokemonsList(url: URL) {
