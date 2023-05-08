@@ -11,17 +11,20 @@ struct MovesView: View {
     var moves: [String]
     var title: String
     var body: some View {
-        ContainerInfoView(title: title) {
-            ForEach(Array(moves.enumerated()), id: \.1) { (index, move) in
-                if index < 9 {
-                    VStack {
-                        CharacteristicTextView(characteristic: move)
+        ContainerInfoView(title: title, count: "\(moves.count)") {
+            ScrollView {
+                ForEach(Array(moves.enumerated()), id: \.1) { (index, move) in
+                    LazyVStack {
+                        ZStack(alignment: .leading) {
+                            RoundedRectangle(cornerRadius: 5)
+                                .frame(height: 50)
+                                .foregroundColor(PokeColor.white.color)
+                            CharacteristicTextView(characteristic: move)
+                                .padding(.leading, 20)
+                        }
                     }
                 }
-            }
-            if moves.count > 9 {
-                CharacteristicTextView(characteristic: "...")
-            }
+            }.frame(height: 220)
         }
     }
 }
