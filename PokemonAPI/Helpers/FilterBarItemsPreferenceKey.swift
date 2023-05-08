@@ -17,7 +17,7 @@ struct FilterBarItemsPreferenceKey: PreferenceKey {
 
 struct FilterBarItemViewModifier: ViewModifier {
     
-    let tab : FilterTabItem
+    let tab: FilterTabItem
     @Binding var selection: FilterTabItem
     
     func body(content: Content) -> some View {

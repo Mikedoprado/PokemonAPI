@@ -8,13 +8,18 @@
 import Foundation
 import Combine
 
-final class ListPokemonViewModel: ObservableObject {
-    @Published var pokeList: [PokemonViewModel] = []
+class AppStates {
     @Published var isLoading: Bool = false
-    @Published var filterBy: FilterTabItem = .name
     @Published var textSearching: String = ""
     @Published var invalidSearch: Bool = false
     @Published var connectivity: Bool = true
+    @Published var loadMore: Bool = false
+}
+
+final class ListPokemonViewModel: ObservableObject {
+    @Published var pokeList: [PokemonViewModel] = []
+    @Published var filterBy: FilterTabItem = .name
+    @Published var appStates = AppStates()
     
     private var cancellables = Set<AnyCancellable>()
     private var fetchList: [PokemonViewModel] = []
@@ -26,16 +31,26 @@ final class ListPokemonViewModel: ObservableObject {
         getPokemonsList(url: urlPokelist)
         searchByFilter()
         setInitialValues()
+        
+        appStates.$loadMore
+            .removeDuplicates()
+            .sink { [weak self] loadingMore in
+                if loadingMore {
+                    self?.loadMorePokemons()
+                }
+            }
+            .store(in: &cancellables)
+
     }
     
     private func getPokemonsList(url: URL) {
-        isLoading = true
+        appStates.isLoading = true
         service
             .getPokemonList(url: url)
             .receive(on: RunLoop.main)
             .sink { [weak self] completion in
                 if case .failure = completion {
-                    self?.invalidSearch = true
+                    self?.appStates.invalidSearch = true
                     // MARK: TO-DO
                     // Show error when don't have any pokemon in localDB and it was a failure on the request
                     print("failure request")
@@ -54,16 +69,16 @@ final class ListPokemonViewModel: ObservableObject {
     private func getPokemon(url: URL) {
         service
             .getPokemons(url: url)
-            .handleEvents(receiveCompletion: { [weak self] completion in
+            .handleEvents(receiveCompletion: { completion in
                 if case .failure = completion {
-                    guard let self = self else { return }
+//                    guard let self = self else { return }
 //                    return self.getLocalPokemons()
                 }
             })
             .receive(on: RunLoop.main)
             .sink { [weak self] completion in
                 if case .failure = completion {
-                    self?.invalidSearch = true
+                    self?.appStates.invalidSearch = true
                     print("failure request")
                 }
             } receiveValue: { [weak self] pokemon in
@@ -72,8 +87,8 @@ final class ListPokemonViewModel: ObservableObject {
     }
     
     private func searchByFilter() {
-        self.isLoading = true
-        $textSearching
+        appStates.isLoading = true
+        appStates.$textSearching
             .filter { !$0.isEmpty }
             .debounce(for: .seconds(1.5), scheduler: DispatchQueue.main)
             .sink { [weak self] searchText in
@@ -86,6 +101,31 @@ final class ListPokemonViewModel: ObservableObject {
                 }
             }
             .store(in: &cancellables)
+    }
+    
+    private func loadMorePokemons() {
+        appStates.isLoading = true
+        service.loadMorePokemons()
+            .handleEvents(receiveCompletion: { completion in
+                if case .failure = completion {
+                    // MARK: TO-DO
+                    // Show error where the user is informed that is the final of the list o was some kind of problem
+                }
+            })
+            .receive(on: RunLoop.main)
+            .sink { [weak self] completion in
+                if case .failure = completion {
+                    self?.appStates.invalidSearch = true
+                    print("failure request")
+                }
+            } receiveValue: { [weak self] pokemons in
+                guard let self = self else { return }
+                let sortedPokemons = pokemons.sorted(by: { $0.id < $1.id }).map { PokemonViewModel($0) }
+                if !self.fetchList.isEmpty {
+                    self.fetchList += sortedPokemons
+                }
+                self.setValues(list: self.fetchList)
+            }.store(in: &cancellables)
     }
     
 //    private func getLocalPokemons() {
@@ -105,8 +145,8 @@ final class ListPokemonViewModel: ObservableObject {
 //    }
     
     private func setInitialValues() {
-        self.isLoading = false
-        $textSearching
+        appStates.isLoading = false
+        appStates.$textSearching
             .filter { $0.isEmpty }
             .sink { [weak self] _ in
                 guard let self = self else { return }
@@ -118,8 +158,8 @@ final class ListPokemonViewModel: ObservableObject {
     
     private func setValues(list: [PokemonViewModel]) {
         self.pokeList = list
-        self.isLoading = false
-        self.invalidSearch = false
+        self.appStates.isLoading = false
+        self.appStates.invalidSearch = false
     }
 
 }

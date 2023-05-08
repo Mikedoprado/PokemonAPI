@@ -15,13 +15,14 @@ struct ComposerPokemonList {
     func compose() -> NavigationPokeList {
         NavigationPokeList(
             list: pokelistViewModel.pokeList,
-            textfieldSearch: $pokelistViewModel.textSearching,
-            isLoading: $pokelistViewModel.isLoading,
-            invalidSearch: $pokelistViewModel.invalidSearch,
-            connectivity: $pokelistViewModel.connectivity,
+            textfieldSearch: $pokelistViewModel.appStates.textSearching,
+            isLoading: $pokelistViewModel.appStates.isLoading,
+            invalidSearch: $pokelistViewModel.appStates.invalidSearch,
+            connectivity: $pokelistViewModel.appStates.connectivity,
             isLandscape: $deviceOrientationViewModel.isLandscape,
-            filterBy: $pokelistViewModel.filterBy
-        )
+            filterBy: $pokelistViewModel.filterBy,
+            loadMore: $pokelistViewModel.appStates.loadMore)
+        
     }
 }
 
@@ -52,7 +53,7 @@ final class Service {
             .flatMap { [weak self] pokeItemList -> AnyPublisher<[Pokemon], Error> in
                 guard let self = self else { return Empty<[Pokemon], Error>().eraseToAnyPublisher() }
                 self.nextPage = pokeItemList.next
-                let pokemonPublisher = getPokeItems(pokeItemList)
+                let pokemonPublisher = getPokemonItems(pokeItemList)
                 return Publishers.Sequence(sequence: pokemonPublisher)
                     .flatMap { $0 }
                     .collect()
@@ -61,7 +62,7 @@ final class Service {
             .eraseToAnyPublisher()
     }
     
-    private func getPokeItems(_ listItems: ListPokeItems) -> [AnyPublisher<Pokemon, Error>] {
+    private func getPokemonItems(_ listItems: ListPokeItems) -> [AnyPublisher<Pokemon, Error>] {
         let searchPokemons = listItems.pokemon.map({ $0.map { $0.pokemon } })
         guard let items = listItems.results != nil ? listItems.results : searchPokemons else { return [] }
         let pokemonPublisher = items.map { item  in
@@ -69,5 +70,13 @@ final class Service {
             return self.getPokemons(url: url)
         }
         return pokemonPublisher
+    }
+    
+    func loadMorePokemons() -> AnyPublisher<[Pokemon], Error> {
+        guard
+            let urlString = nextPage,
+            let nextUrl = URL(string: urlString)
+        else { return Empty<[Pokemon], Error>().eraseToAnyPublisher() }
+        return getPokemonList(url: nextUrl)
     }
 }
